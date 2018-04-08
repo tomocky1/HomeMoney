@@ -25,9 +25,10 @@ Route::post('WalletMgt', 'WalletMgtController@store')->name('walletMgt.store');
 Route::get('WalletMgt/delete/{id}', 'WalletMgtController@delete')->name('walletMgt.delete');
 
 // 支払い方法
-Route::get('PaymentMgt', 'PaymentMgtController@index')->name('paymentMgt.index');
-Route::post('PaymentMgt', 'PaymentMgtController@store')->name('paymentMgt.store');
-Route::get('PaymentMgt/delete/{id}', 'PaymentMgtController@destroy')->name('paymentMgt.delete');
+Route::get('Payment', 'PaymentController@index')->name('payment.index');
+Route::post('Payment', 'PaymentController@store')->name('payment.store');
+Route::get('Payment/delete/{id}', 'PaymentController@destroy')->name('payment.delete');
+Route::get('Payment/edit/{id}', 'PaymentController@edit')->name('payment.edit');
 
 // 受取方法
 Route::get('Receipt', 'Mst\ReceiptController@index')->name('receipt.index');

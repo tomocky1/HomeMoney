@@ -29,7 +29,7 @@
     </div>
 @endif
 
-<!-- box -->
+<!-- ▼ 登録用 box -->
 <div class="box">
 
   <!-- .box-header -->
@@ -39,7 +39,10 @@
   <!-- /.box-header -->
   
   <!-- form start -->
-  <form action="{{ route('paymentMgt.store') }}" method="POST" id="paymentForm">
+  <form action="{{ route('payment.store') }}" method="POST" id="paymentForm">
+  @if (isset($payment->id))
+    <input type="hidden" id="id" name="id" value="{{ $payment->id }}" />
+  @endif
   {{ csrf_field() }}
     <div class="box-body">
       <div class="row">
@@ -47,7 +50,7 @@
         <div class="col-md-8">
           <div class="form-group">
             <label for="exampleInputEmail1">支払方法名称</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="">
+            <input type="text" class="form-control" id="name" name="name" value="{{ $payment->name or '' }}">
           </div>
         </div>
         <!-- /支払い方法名称 -->
@@ -55,11 +58,15 @@
         <!-- 関連する財布 -->
         <div class="col-md-3">
           <div class="form-group">
-            <label for="exampleInputEmail1">関連する財布</label>
-            <select type="text" class="form-control" id="walletId" name="walletId" placeholder="">
+            <label for="walletId">関連する財布</label>
+            <select type="text" class="form-control" id="walletId" name="walletId">
               <option value=""></option>
               @for ($i = 0; $i < count($wallets); $i++)
-                <option value="{{ $wallets[$i]->id }}">{{ $wallets[$i]->name }}</option>
+                @if (isset($payment) && $payment->wallet_id == $wallets[$i]->id)
+                  <option value="{{ $wallets[$i]->id }}" selected="selected">{{ $wallets[$i]->name }}</option>
+                @else
+                  <option value="{{ $wallets[$i]->id }}">{{ $wallets[$i]->name }}</option>
+                @endif
               @endfor
             </select>
           </div>
@@ -70,7 +77,7 @@
         <div class="col-md-1">
           <div class="form-group">
             <label for="exampleInputEmail1">表示順</label>
-            <input type="text" class="form-control" id="dorder" name="dorder" placeholder="">
+            <input type="text" class="form-control" id="dorder" name="dorder" value="{{ $payment->dorder or '' }}">
           </div>
         </div>
         <!-- /表示順 -->
@@ -90,7 +97,7 @@
     <!-- /.box-body -->
   </form>
 </div>
-<!-- /.box -->
+<!-- ▲ 登録用 box -->
 
 <!-- .box -->
 <div class="box">
@@ -99,22 +106,24 @@
   </div>
   <!-- /.box-header -->
   <div class="box-body">
-    <table id="example2" class="table table-bordered table-hover">
+    <table id="paymentList" class="table table-bordered table-hover">
       <thead>
       <tr>
-        <th class="col-md-6">支払方法</th>
-        <th class="col-md-4">財布</th>
-        <th class="col-md-1">表示順</th>
-        <th class="col-md-1">削除</th>
+        <th class="col-md-5 text-center">支払方法</th>
+        <th class="col-md-4 text-center">財布</th>
+        <th class="col-md-1 text-center">表示順</th>
+        <th class="col-md-1 text-center">修正</th>
+        <th class="col-md-1 text-center">削除</th>
       </tr>
       </thead>
       @for($i = 0; $i < count($payments); $i++)
       <tbody>
       <tr>
-        <td>{{ $payments[$i]->name }}</td>
-        <td>{{ $payments[$i]->wallet->name }}</td>
-        <td class="text-right">{{ $payments[$i]->dorder }}</td>
-        <td><form action="{{ route('paymentMgt.delete', ['id' => $payments[$i]->id ]) }}" method="GET"><button type="submit" class="btn">削除</button></form></td>
+        <td class="text-center">{{ $payments[$i]->name }}</td>
+        <td class="text-center">{{ $payments[$i]->wallet->name }}</td>
+        <td class="text-center">{{ $payments[$i]->dorder }}</td>
+        <td class="text-center"><form action="{{ route('payment.edit', ['id' => $payments[$i]->id ]) }}" method="GET"><button type="submit" class="btn">修正</button></form>
+        <td class="text-center"><form action="{{ route('payment.delete', ['id' => $payments[$i]->id ]) }}" method="GET"><button type="submit" class="btn">削除</button></form></td>
       </tr>
       </tbody>
       @endfor

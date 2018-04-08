@@ -291,7 +291,7 @@ desired effect
           </a>
           <ul class="treeview-menu">
             <li><a href="{{ route('walletMgt.index') }}">財布</a></li>
-            <li><a href="{{ route('paymentMgt.index') }}">支払方法</a></li>
+            <li><a href="{{ route('payment.index') }}">支払方法</a></li>
             <li><a href="{{ route('receipt.index') }}">受取方法</a></li>
             <li><a href="{{ route('account.index') }}">勘定科目</a></li>
           </ul>
