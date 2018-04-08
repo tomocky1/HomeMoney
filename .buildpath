@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry excluding="vendor/mockery/mockery/tests/Mockery/Fixtures/MethodWithNullableParameters.php|vendor/mockery/mockery/tests/Mockery/Fixtures/MethodWithNullableReturnType.php|vendor/symfony/http-kernel/Tests/Fixtures/Controller/NullableController.php" kind="src" path=""/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>

@@ -1,0 +1,557 @@
+﻿# A5:ER FORMAT:11
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright (C)2007 m.matsubara
+# A5:SQL Mk-2 Copyright (C)1997 m.matsubara
+#  http://www.wind.sannet.ne.jp/m_matsu/developer/a5m2/
+
+[Manager]
+ProjectName=
+Author=
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",2,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=2
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=Tahoma
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=6
+RDBMSTypeName=PostgreSQL
+GenerateDropTableStatement=1
+DropTableIfExists=1
+ForceQuoteIdentifier=1
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+ShowTag=1
+ShowCommonAttributes=0
+
+[Relation]
+Entity1=incomes
+Entity2=receipts
+RelationType1=2
+RelationType2=3
+Fields1=receipt_id
+Fields2=id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,4041,5959,4582,R,R
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20180323014853
+LineMode=0
+Bar1=404
+Bar2=596
+Bar3=458
+TermPos1=R
+TermPos2=R
+
+[Entity]
+PName=date_numbering
+LName=日別採番
+Comment=
+TableOption=
+Page=MAIN
+Left=1250
+Top=150
+Field="ID","id","bigserial",,0,"","",$FFFFFFFF,""
+Field="採番種別","class","@VARCHAR","NOT NULL",,"","Numbering0001:収入番号、Numbering0002：支出番号、Numbering0003:移動番号",$FFFFFFFF,""
+Field="日付","date","@DATE","NOT NULL",,"","",$FFFFFFFF,""
+Field="採番値","val","bigint","NOT NULL",,"0","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319012040
+Position="MAIN",1250,150
+
+[Entity]
+PName=accounts
+LName=勘定科目
+Comment=
+TableOption=
+Page=MAIN
+Left=550
+Top=850
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="勘定科目名称","name","character varying","NOT NULL",,"","",$FFFFFFFF,""
+Field="表示順","dorder","integer","NOT NULL",,"","",$FFFFFFFF,""
+Field="有効フラグ","enable_flag","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003528
+Position="MAIN",550,850
+
+[Entity]
+PName=balances
+LName=残高
+Comment=
+TableOption=
+Page=MAIN
+Left=900
+Top=100
+Field="id","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="財布ID","wallet_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="残高","balance","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003712
+Position="MAIN",900,100
+
+[Entity]
+PName=incomes
+LName=収入
+Comment=
+TableOption=
+Page=MAIN
+Left=1050
+Top=550
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="勘定科目ID","account_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="受取方法ID","receipt_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="収入番号 ","income_no","character(11)","NOT NULL",,""," 収入毎に割り振る番号.YYYYMMDDnnn形式とし、YYYYMMDDは取引日の文字列表現、nnnは取引日毎の連番",$FFFFFFFF,""
+Field="摘要 ","summery","character varying",,,""," 収入の摘要を記載",$FFFFFFFF,""
+Field="金額","amount","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="取引日","trade_date","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="決済日","settle_date","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="登録日時","regist_tsp","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="修正フラグ","modify_flg","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+Field="修正前ID","id_bfr","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="削除フラグ","delete_flg","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+Index=incomes_income_no_key=2,income_no
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003611
+Position="MAIN",1050,550,256,406
+
+[Entity]
+PName=migrations
+LName=migrations
+Comment=
+TableOption=
+Page=MAIN
+Left=450
+Top=100
+Field="id","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="migration","migration","character varying(255)","NOT NULL",,"","",$FFFFFFFF,""
+Field="batch","batch","integer","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003730
+Position="MAIN",450,100
+
+[Entity]
+PName=moves
+LName=移動
+Comment=
+TableOption=
+Page=MAIN
+Left=800
+Top=1650
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="財布ID","wallet_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="移動番号","move_no","character(12)","NOT NULL",,"","",$FFFFFFFF,""
+Field="摘要","summery","character varying",,,"","",$FFFFFFFF,""
+Field="金額","amount","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="取引日","trade_date","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="決済日","settle_date","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="登録日時","regist_tsp","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="修正フラグ","modify_flg","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+Field="修正前ID","id_bfr","bigint",,,"","",$FFFFFFFF,""
+Field="削除フラグ","delete_flg","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003633
+Position="MAIN",800,1650
+
+[Entity]
+PName=outgoings
+LName=支出
+Comment=
+TableOption=
+Page=MAIN
+Left=950
+Top=1100
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="勘定科目ID","account_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="支払方法ID","payment_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="支出番号","outgoing_no","character(11)","NOT NULL",,"","",$FFFFFFFF,""
+Field="摘要","summery","character varying",,,"","",$FFFFFFFF,""
+Field="金額","amount","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="取引日","trade_date","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="決済日","settle_date","date",,,"","",$FFFFFFFF,""
+Field="登録日時","regist_tsp","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="修正フラグ","modify_flg","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="修正前ID","id_bfr","bigint",,,"","",$FFFFFFFF,""
+Field="削除フラグ","delete_flg","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+Index=outgoings_outgoing_no_key=2,outgoing_no
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003620
+Position="MAIN",950,1100
+
+[Entity]
+PName=password_resets
+LName=password_resets
+Comment=
+TableOption=
+Page=MAIN
+Left=650
+Top=100
+Field="email","email","character varying(255)","NOT NULL",,"","",$FFFFFFFF,""
+Field="token","token","character varying(255)","NOT NULL",,"","",$FFFFFFFF,""
+Field="created_at","created_at","timestamp(0) without time zone",,,"","",$FFFFFFFF,""
+Index=password_resets_email_index=0,email
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="MAIN",650,100
+
+[Entity]
+PName=payments
+LName=支払方法
+Comment=
+TableOption=
+Page=MAIN
+Left=550
+Top=1200
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="財布ID","wallet_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="支払い方法名称","name","character varying",,,"","",$FFFFFFFF,""
+Field="表示順","dorder","integer","NOT NULL",,"","",$FFFFFFFF,""
+Field="有効フラグ","enable_flag","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003550
+Position="MAIN",550,1200
+
+[Entity]
+PName=receipts
+LName=受取方法
+Comment=
+TableOption=
+Page=MAIN
+Left=550
+Top=550
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="財布ID","wallet_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="受取方法名称","name","character varying",,,"","",$FFFFFFFF,""
+Field="表示順","dorder","integer","NOT NULL",,"","",$FFFFFFFF,""
+Field="有効フラグ","enable_flag","boolean",,,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003539
+Position="MAIN",550,550
+
+[Entity]
+PName=trans
+LName=受払
+Comment=
+TableOption=
+Page=MAIN
+Left=1650
+Top=900
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="収入ID","income_id","bigint",,,"","",$FFFFFFFF,""
+Field="支出ID","outgoing_id","bigint",,,"","",$FFFFFFFF,""
+Field="移動ID","move_id","bigint",,,"","",$FFFFFFFF,""
+Field="修正削除フラグ","mod_del_flg","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="財布ID","wallet_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="勘定科目ID","account_list_id","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="摘要","summery","character varying","NOT NULL",,"","",$FFFFFFFF,""
+Field="金額","amount","bigint","NOT NULL",,"0","",$FFFFFFFF,""
+Field="増減","up_down","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="決済日","settle_date","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003654
+Position="MAIN",1650,900
+
+[Entity]
+PName=users
+LName=users
+Comment=
+TableOption=
+Page=MAIN
+Left=200
+Top=100
+Field="id","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="name","name","character varying(255)","NOT NULL",,"","",$FFFFFFFF,""
+Field="email","email","character varying(255)","NOT NULL",,"","",$FFFFFFFF,""
+Field="password","password","character varying(255)","NOT NULL",,"","",$FFFFFFFF,""
+Field="remember_token","remember_token","character varying(100)",,,"","",$FFFFFFFF,""
+Field="created_at","created_at","timestamp(0) without time zone",,,"","",$FFFFFFFF,""
+Field="updated_at","updated_at","timestamp(0) without time zone",,,"","",$FFFFFFFF,""
+Index=users_email_unique=2,email
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003831
+Position="MAIN",200,100
+
+[Entity]
+PName=wallets
+LName=財布
+Comment=
+TableOption=
+Page=MAIN
+Left=200
+Top=600
+Field="ID","id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="財布名称","name","character varying","NOT NULL",,"","",$FFFFFFFF,""
+Field="表示順","dorder","integer","NOT NULL",,"","",$FFFFFFFF,""
+Field="有効フラグ","enable_flag","boolean","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS登録日時","sys_created_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS更新日時","sys_updated_at","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="SYS削除日時","sys_deleted_at","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="SYS削除フラグ","sys_deleted_flag","boolean","NOT NULL",,"false","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20180319003559
+Position="MAIN",200,600
+
+[Relation]
+Entity1=accounts
+Entity2=outgoings
+RelationType1=2
+RelationType2=3
+Fields1=id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,496,R,R
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20180318235836
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=50
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=accounts
+Entity2=incomes
+RelationType1=1
+RelationType2=3
+Fields1=id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,500,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=50
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=incomes
+Entity2=trans
+RelationType1=1
+RelationType2=3
+Fields1=id
+Fields2=income_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,533,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=53
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=outgoings
+Entity2=trans
+RelationType1=1
+RelationType2=3
+Fields1=id
+Fields2=outgoing_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,533,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=53
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=moves
+Entity2=trans
+RelationType1=1
+RelationType2=3
+Fields1=id
+Fields2=move_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,500,R,R
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20180318235811
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=50
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=payments
+Entity2=outgoings
+RelationType1=2
+RelationType2=3
+Fields1=id
+Fields2=payment_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,552,R,R
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20180318235828
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=55
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=wallets
+Entity2=receipts
+RelationType1=2
+RelationType2=3
+Fields1=id
+Fields2=wallet_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,444,R,R
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20180318235733
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=44
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=wallets
+Entity2=payments
+RelationType1=2
+RelationType2=3
+Fields1=id
+Fields2=wallet_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,444,R,R
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20180318235741
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=44
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=wallets
+Entity2=moves
+RelationType1=2
+RelationType2=3
+Fields1=id
+Fields2=wallet_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,500,R,R
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20180318235747
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=50
+TermPos1=R
+TermPos2=R
