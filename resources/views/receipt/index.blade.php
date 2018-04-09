@@ -2,6 +2,9 @@
 
 @section('title', '受取方法')
 
+@section('menu_master', 'active')
+@section('menu_receipt', 'active')
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">

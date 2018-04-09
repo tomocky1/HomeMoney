@@ -2,6 +2,9 @@
 
 @section('title', '支払方法管理')
 
+@section('menu_master', 'active')
+@section('menu_payment', 'active')
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -34,7 +37,11 @@
 
   <!-- .box-header -->
   <div class="box-header">
-    <h3 class="box-title">登録</h3>
+      @if (isset($editFlag))
+      <h3 class="box-title">修正</h3>
+      @else
+      <h3 class="box-title">登録</h3>
+      @endif
   </div>
   <!-- /.box-header -->
   
@@ -49,7 +56,7 @@
         <!-- 支払い方法名称 -->
         <div class="col-md-8">
           <div class="form-group">
-            <label for="exampleInputEmail1">支払方法名称</label>
+            <label for="name">支払方法名称</label>
             <input type="text" class="form-control" id="name" name="name" value="{{ $payment->name or '' }}">
           </div>
         </div>

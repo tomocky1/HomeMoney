@@ -2,6 +2,9 @@
 
 @section('title', '収入一覧')
 
+@section('menu_income', 'active')
+@section('menu_income_list', 'active')
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">

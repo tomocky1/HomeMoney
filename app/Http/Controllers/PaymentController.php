@@ -44,6 +44,7 @@ class PaymentController extends Controller
     	$data['payments'] = Payment::where('sys_deleted_flag', false)->where('enable_flag', true)->orderBy('dorder', 'asc')->get();
     	$data['wallets'] = Wallet::where('sys_deleted_flag', false)->where('enable_flag', true)->orderBy('dorder', 'asc')->get();
     	$data['payment'] = Payment::find($id);
+    	$data['editFlag'] = true;
     	return view('payment.index', $data);
     }
 }

@@ -2,6 +2,9 @@
 
 @section('title', '勘定科目')
 
+@section('menu_master', 'active')
+@section('menu_account', 'active')
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">

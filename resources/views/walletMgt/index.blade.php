@@ -2,6 +2,9 @@
 
 @section('title', '財布管理')
 
+@section('menu_master', 'active')
+@section('menu_wallet', 'active')
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
