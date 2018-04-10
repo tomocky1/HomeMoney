@@ -20,9 +20,10 @@ Auth::routes();
 
 // マスタ関連
 // 財布
-Route::get('WalletMgt', 'WalletMgtController@index')->name('walletMgt.index');
-Route::post('WalletMgt', 'WalletMgtController@store')->name('walletMgt.store');
-Route::get('WalletMgt/delete/{id}', 'WalletMgtController@delete')->name('walletMgt.delete');
+Route::get('Wallet', 'WalletController@index')->name('wallet.index');
+Route::post('Wallet', 'WalletController@store')->name('wallet.store');
+Route::get('Wallet/delete/{id}', 'WalletController@delete')->name('wallet.delete');
+Route::get('Wallet/edit/{id}', 'WalletController@edit')->name('wallet.edit');
 
 // 支払い方法
 Route::get('Payment', 'PaymentController@index')->name('payment.index');

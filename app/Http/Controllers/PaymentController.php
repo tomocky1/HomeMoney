@@ -9,6 +9,11 @@ use HomeMoney\Http\Requests\PaymentStoreRequest;
 
 class PaymentController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+	
     public function index()
     {
     	$data['payments'] = Payment::where('sys_deleted_flag', false)->where('enable_flag', true)->orderBy('dorder', 'asc')->get();

@@ -37,12 +37,19 @@
 
   <!-- .box-header -->
   <div class="box-header">
-    <h3 class="box-title">登録</h3>
+      @if (isset($editFlag))
+      <h3 class="box-title">修正</h3>
+      @else
+      <h3 class="box-title">登録</h3>
+      @endif
   </div>
   <!-- /.box-header -->
   
   <!-- form start -->
-  <form action="{{ route('walletMgt.store') }}" method="POST" id="walletForm">
+  <form action="{{ route('wallet.store') }}" method="POST" id="walletForm">
+  @if (isset($editFlag))
+    <input type="hidden" id="id" name="id" value="{{ $wallet->id }}" />
+  @endif
   {{ csrf_field() }}
     <!-- .box-body -->
     <div class="box-body">
@@ -51,8 +58,8 @@
         <!-- 財布名称 -->
         <div class="col-md-10">
           <div class="form-group">
-            <label for="exampleInputEmail1">財布名称</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="">
+            <label for="name">財布名称</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ $wallet->name or '' }}" />
           </div>
         </div>
         <!-- /財布名称 -->
@@ -60,8 +67,8 @@
         <!-- 表示順 -->
         <div class="col-md-2">
           <div class="form-group">
-            <label for="exampleInputEmail1">表示順</label>
-            <input type="text" class="form-control" id="dorder" name="dorder" placeholder="">
+            <label for="dorder">表示順</label>
+            <input type="text" class="form-control" id="dorder" name="dorder" value="{{ $wallet->dorder or '' }}" />
           </div>
         </div>
         <!-- /表示順 -->
@@ -87,8 +94,9 @@
     <table id="example2" class="table table-bordered table-hover">
       <thead>
         <tr>
-          <th class="col-md-9">財布名称</th>
+          <th class="col-md-8">財布名称</th>
           <th class="col-md-2">表示順</th>
+          <th class="col-md-1">修正</th>
           <th class="col-md-1">削除</th>
         </tr>
       </thead>
@@ -98,7 +106,11 @@
           <td>{{ $wallets[$i]->name }}</td>
           <td>{{ $wallets[$i]->dorder }}</td>
           <td>
-            <form action="{{ route('walletMgt.delete', ['id' => $wallets[$i]->id ]) }}" method="GET">
+            <form action="{{ route('wallet.edit', ['id' => $wallets[$i]->id ]) }}" method="GET">
+              <button type="submit" class="btn">修正</button>
+            </form>
+          <td>
+            <form action="{{ route('wallet.delete', ['id' => $wallets[$i]->id ]) }}" method="GET">
               <button type="submit" class="btn">削除</button>
             </form>
           </td>

@@ -272,7 +272,7 @@ desired effect
         <li><a href="{{ route('main.top') }}"><span>メニュー</span></a></li>
 
         <li class="@yield('menu_income') treeview">
-          <a href="{{ route('walletMgt.index') }}"><span>収入</span>
+          <a href="{{ route('income.index') }}"><span>収入</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -284,13 +284,13 @@ desired effect
         </li>
      
         <li class="@yield('menu_master') treeview">
-          <a href="{{ route('walletMgt.index') }}"><span>マスタ管理</span>
+          <a href="{{ route('wallet.index') }}"><span>マスタ管理</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="@yield('menu_wallet')"><a href="{{ route('walletMgt.index') }}">財布</a></li>
+            <li class="@yield('menu_wallet')"><a href="{{ route('wallet.index') }}">財布</a></li>
             <li class="@yield('menu_payment')"><a href="{{ route('payment.index') }}">支払方法</a></li>
             <li class="@yield('menu_receipt')"><a href="{{ route('receipt.index') }}">受取方法</a></li>
             <li class="@yield('menu_account')"><a href="{{ route('account.index') }}">勘定科目</a></li>

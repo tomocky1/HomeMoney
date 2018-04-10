@@ -20,7 +20,7 @@
   <!-- Main content -->
   <section class="content container-fluid">
   
-    <!-- ▼ 収支 -->
+    <!-- ▼ 収入 -->
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">収支</h3>
@@ -29,10 +29,10 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div>
-          <a href="{{ route('account.index') }}">収支一覧</a><br />
+          <a href="{{ route('income.index') }}">収入一覧</a><br />
         </div>
         <div>
-          <a href="{{ route('account.index') }}">収支登録</a><br />
+          <a href="{{ route('income.create') }}">収入登録</a><br />
         </div>
         
        
@@ -50,10 +50,10 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div>
-          <a href="{{ route('walletMgt.index') }}">財布</a><br />
+          <a href="{{ route('wallet.index') }}">財布</a><br />
         </div>
         <div>
-          <a href="{{ route('paymentMgt.index') }}">支払方法</a><br />
+          <a href="{{ route('payment.index') }}">支払方法</a><br />
         </div>
         <div>
           <a href="{{ route('receipt.index') }}">受取方法</a><br />
