@@ -3,7 +3,6 @@
 namespace HomeMoney\Http\Controllers;
 
 use Illuminate\Http\Request;
-use HomeMoney\Models\Wallet;
 use HomeMoney\Models\Income;
 use HomeMoney\Http\Requests\IncomeIndexRequest;
 use Carbon\Carbon;
@@ -40,14 +39,15 @@ class IncomeController extends Controller
     	// 収入一覧データを取得
     	$data['incomes'] = $builder->get();
     	
-    	// 検索項目用の勘定科目
-    	$data['accounts'] = Account::where('enable_flag', true)->get();
-    	
-    	// 検索項目用の受取方法
-    	$data['receipts'] = Receipt::where('enable_flag', true)->get();
+    	// 検索項目を取得
+    	$data['startDate'] = isset($tradeDateFrom) ? $tradeDateFrom : Carbon::now()->addMonths(-1)->format('Y-m-d'); // 開始日
+    	$data['endDate'] = isset($tradeDateTo) ? $tradeDateTo : Carbon::now()->format('Y-m-d');                      // 終了日
+    	$data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'desc')->get();                  // 勘定科目
+    	$data['receipts'] = Receipt::where('enable_flag', true)->orderBy('dorder', 'desc')->get();                  // 受取方法
     	
     	// Formデータを取得
     	$data['req'] = $request;
+    	
     	return view('income.index', $data);
     }
     

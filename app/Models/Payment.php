@@ -38,4 +38,9 @@ class Payment extends Model
 		$this->sys_deleted_at = Carbon::now();
 		$this->save();
 	}
+	
+	public static function getIdByName($name)
+	{
+		return self::where('name', $name)->first()->id;
+	}
 }

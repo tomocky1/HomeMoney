@@ -10,6 +10,7 @@ use HomeMoney\Models\Account;
 use HomeMoney\Models\DateNumbering;
 use Carbon\Carbon;
 use HomeMoney\Models\Income;
+use HomeMoney\Models\OutGoing;
 
 class TestDataImport extends Command
 {
@@ -45,6 +46,7 @@ class TestDataImport extends Command
     public function handle()
     {
     	// 既存データの削除
+    	OutGoing::where('delete_flag', true)->orWhere('delete_flag', false)->delete();
     	Income::where('delete_flag', true)->orWhere('delete_flag', false)->delete();
     	Account::where('enable_flag', true)->orWhere('enable_flag', false)->delete();
     	Payment::where('enable_flag', true)->orWhere('enable_flag', false)->delete();
@@ -73,7 +75,8 @@ class TestDataImport extends Command
     
     	// 支払方法
     	self::savePayment("現金（財布）", "財布", 10);
-    	
+    	self::savePayment("現金", "財布", 20);
+    	 
     	// 受取方法
         self::saveReceipt("現金", "財布", 10);
         self::saveReceipt("銀行振込（SBI）", "住信SBI-代表口座", 20);
@@ -84,6 +87,9 @@ class TestDataImport extends Command
         
         // 収入
         self::saveIncome("雑費", "現金", "食事", 5000, Carbon::now(), Carbon::now());
+        
+        // 支出
+        self::saveOutGoing("雑費", "現金", "食事", 7000, Carbon::now(), Carbon::now());
     	
     
     }
@@ -140,6 +146,22 @@ class TestDataImport extends Command
     	$income->modify_flag = false;
     	$income->delete_flag = false;
     	$income->save();
+    }
+    
+    private static function saveOutGoing($accountName, $paymentName, $summery, $amount, $tradeDate, $settleDate)
+    {
+    	$outGoing = new OutGoing();
+    	$outGoing->account_id = Account::getIdByName($accountName);
+    	$outGoing->payment_id = Payment::getIdByName($paymentName);
+    	$outGoing->outgoing_no = str_pad(DateNumbering::getSingleDateNumber("0002", Carbon::now()), 5, 0, STR_PAD_LEFT);
+    	$outGoing->summery = $summery;
+    	$outGoing->amount = $amount;
+    	$outGoing->trade_date = $tradeDate;
+    	$outGoing->settle_date = $settleDate;
+    	$outGoing->regist_tsp = Carbon::now();
+    	$outGoing->modify_flag = false;
+    	$outGoing->delete_flag = false;
+    	$outGoing->save();
     }
     
     

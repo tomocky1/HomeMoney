@@ -49,10 +49,12 @@ Route::post('Income', 'IncomeController@index')->name('income.search');
 Route::get('Income/create', 'IncomeController@create')->name('income.create');
 Route::post('Income/store', 'IncomeController@store')->name('income.store');
 
+// 支出
+Route::get('OutGoing', 'OutGoingController@index')->name('outgoing.index');
+Route::post('OutGoing', 'OutGoingController@index')->name('outgoing.search');
+Route::get('OutGoing/create', 'OutGoingController@create')->name('outgoing.create');
+Route::post('OutGoing/store', 'OutGoingController@store')->name('outgoing.store');
 
-Route::get('AccountListManagement', 'Mst\AccountListController@index')->name('accountListManagement.index');
-Route::post('AccountListManagement', 'Mst\AccountListController@store')->name('accountListManagement.store');
-Route::get('AccountListManagement/delete/{id}', 'Mst\AccountListController@destroy')->name('accountListManagement.delete');
 
 // その他のコントローラ
 Route::get('/home', 'HomeController@index')->name('home');

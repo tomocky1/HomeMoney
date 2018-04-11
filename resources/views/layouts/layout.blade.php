@@ -271,6 +271,7 @@ desired effect
         <!-- Optionally, you can add icons to the links -->
         <li><a href="{{ route('main.top') }}"><span>メニュー</span></a></li>
 
+        <!-- ▼ 収入 -->
         <li class="@yield('menu_income') treeview">
           <a href="{{ route('income.index') }}"><span>収入</span>
             <span class="pull-right-container">
@@ -282,6 +283,21 @@ desired effect
             <li class="@yield('menu_income_regist')"><a href="{{ route('income.create') }}">収入登録</a></li>
           </ul>
         </li>
+        <!-- ▲ 収入 -->
+     
+        <!-- ▼ 支出 -->
+        <li class="@yield('menu_outgoing') treeview">
+          <a href="{{ route('outgoing.index') }}"><span>支出</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="@yield('menu_outgoing_list')"><a href="{{ route('outgoing.index') }}">支出一覧</a></li>
+            <li class="@yield('menu_outgoing_regist')"><a href="{{ route('outgoing.create') }}">支出登録</a></li>
+          </ul>
+        </li>
+        <!-- ▲ ・ -->
      
         <li class="@yield('menu_master') treeview">
           <a href="{{ route('wallet.index') }}"><span>マスタ管理</span>

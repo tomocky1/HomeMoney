@@ -66,7 +66,8 @@ CREATE TABLE date_numbering
 (
 	-- ID
 	id bigserial NOT NULL,
-	-- 採番種別
+	-- 採番種別 : 種別
+	-- 0001：収入番号
 	cls int NOT NULL,
 	-- 日付
 	ymd date NOT NULL,
@@ -182,11 +183,11 @@ CREATE TABLE outgoings
 	-- 登録日時
 	regist_tsp timestamp NOT NULL,
 	-- 修正フラグ
-	modify_flg boolean NOT NULL,
+	modify_flag boolean NOT NULL,
 	-- 修正前ID
 	id_bfr bigint,
 	-- 削除フラグ
-	delete_flg boolean NOT NULL,
+	delete_flag boolean NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -414,7 +415,8 @@ COMMENT ON COLUMN balances.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN balances.sys_deleted_flag IS 'SYS削除フラグ';
 COMMENT ON TABLE date_numbering IS '日別採番';
 COMMENT ON COLUMN date_numbering.id IS 'ID';
-COMMENT ON COLUMN date_numbering.cls IS '採番種別';
+COMMENT ON COLUMN date_numbering.cls IS '採番種別 : 種別
+0001：収入番号';
 COMMENT ON COLUMN date_numbering.ymd IS '日付';
 COMMENT ON COLUMN date_numbering.val IS '採番値';
 COMMENT ON COLUMN date_numbering.sys_created_at IS 'SYS登録日時';
@@ -464,9 +466,9 @@ COMMENT ON COLUMN outgoings.amount IS '金額';
 COMMENT ON COLUMN outgoings.trade_date IS '取引日';
 COMMENT ON COLUMN outgoings.settle_date IS '決済日';
 COMMENT ON COLUMN outgoings.regist_tsp IS '登録日時';
-COMMENT ON COLUMN outgoings.modify_flg IS '修正フラグ';
+COMMENT ON COLUMN outgoings.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN outgoings.id_bfr IS '修正前ID';
-COMMENT ON COLUMN outgoings.delete_flg IS '削除フラグ';
+COMMENT ON COLUMN outgoings.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN outgoings.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN outgoings.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN outgoings.sys_deleted_at IS 'SYS削除日時';

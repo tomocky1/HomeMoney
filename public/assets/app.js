@@ -1,3 +1,5 @@
+
+
 /**
  * 名称：isNotDate
  * 引数：value：validation をかけたい値
@@ -39,3 +41,29 @@ function isEmpty(value) {
 	
 	return false;
 }
+
+$(document).ready(function() {
+
+/**
+ * ".yen" のタグについてはフォーカスインで 999999 形式とし、フォーカスアウトで 999,999 円 形式とする
+ */
+$(".yen").focus(function() {
+    // カンマ・円を除去
+    if($('#amount').val().length =! 0) { $('#amount').val($('#amount').val().replace(' 円', '').replace(/,/g, '')); }
+    // 数値としての金額を退避する
+    $(this).data('bak', $('#amount').val());
+    // 選択状態にする
+    $(this).select();
+});
+
+// 金額を設定
+$('.yen').blur(function() {
+    // 数値でなければ、退避した金額から復旧
+    if($(this).val() == null || isNaN($(this).val())) { $(this).val($(this).data('bak')); }
+    $(this).val($(this).val().split(/(?=(?:\d{3})+$)/).join() + " 円");
+});
+
+
+
+
+});
