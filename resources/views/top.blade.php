@@ -39,7 +39,28 @@
       </div>
       <!-- /.box-body -->
     </div>
-    <!-- ▲ 収支 -->
+    <!-- ▲ 収入 -->
+  
+    <!-- ▼ 支出 -->
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">支出</h3>
+      </div>
+      
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div>
+          <a href="{{ route('outgoing.index') }}">支出一覧</a><br />
+        </div>
+        <div>
+          <a href="{{ route('outgoing.create') }}">支出登録</a><br />
+        </div>
+        
+       
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- ▲ 支出 -->
   
     <!-- ▼ マスタ管理ｗ -->
     <div class="box">

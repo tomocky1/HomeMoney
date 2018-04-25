@@ -1,5 +1,7 @@
 <?php
 
+use HomeMoney\Http\Controllers\OutGoingController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,6 +56,8 @@ Route::get('OutGoing', 'OutGoingController@index')->name('outgoing.index');
 Route::post('OutGoing', 'OutGoingController@index')->name('outgoing.search');
 Route::get('OutGoing/create', 'OutGoingController@create')->name('outgoing.create');
 Route::post('OutGoing/store', 'OutGoingController@store')->name('outgoing.store');
+Route::get('OutGoing/edit/{id}', 'OutGoingController@edit')->name('outgoing.edit');
+Route::get('OutGoing/delete/{id}', 'OutGoingController@delete')->name('outgoing.delete');
 
 
 // その他のコントローラ

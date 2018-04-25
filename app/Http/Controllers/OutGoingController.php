@@ -56,9 +56,18 @@ class OutGoingController extends Controller
     	
     }
     
-    public function edit()
+    public function edit($id)
     {
+    	// 編集対象の支出を取得
+    	$data['outgoing'] = OutGoing::find($id);
     	
+    	// 選択項目を取得
+    	$data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'desc')->get(); // 勘定科目
+    	$data['payments'] = Payment::where('enable_flag', true)->orderBy('dorder', 'desc')->get(); // 支払方法
+    	$data['today'] = Carbon::now();
+    	$data['editFlag'] = true;
+    	
+    	return view('outgoing.create', $data);
     }
     
     public function create()

@@ -38,12 +38,19 @@
 
   <!-- .box-header -->
   <div class="box-header">
+    @if (isset($editFlag))
+    <h3 class="box-title">修正</h3>
+    @else
     <h3 class="box-title">登録</h3>
+    @endif    
   </div>
   <!-- /.box-header -->
   
   <!-- form start -->
   <form action="{{ route('outgoing.store') }}" method="POST" id="outgoingForm">
+    @if (isset($editFlag))
+    <input type="hidden" name="id" id="id" value="{{ $outgoing->id }}" />
+    @endif  
   {{ csrf_field() }}
     <div class="box-body">
     
@@ -54,7 +61,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="summery">摘要</label>
-            <input type="text" class="form-control" id="summery" name="summery" placeholder="">
+            <input type="text" class="form-control" id="summery" name="summery" value="{{ $outgoing->summery or '' }}" />
           </div>
         </div>
         <!-- ▲ 摘要 -->
@@ -63,7 +70,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label for="amount">金額</label>
-            <input type="text" class="form-control text-right yen" id="amount" name="amount" placeholder="円" />
+            <input type="text" class="form-control text-right yen" id="amount" name="amount" value="{{ $outgoing->amount or '' }}" />
           </div>
         </div>
         <!-- ▲ 金額 -->
@@ -82,7 +89,11 @@
             <select type="text" class="form-control" id="accountId" name="accountId" placeholder="">
               <option value=""></option>
               @for ($i = 0; $i < count($accounts); $i++)
+                @if ($accounts[$i]->id == $outgoing->account_id)
+                <option value="{{ $accounts[$i]->id }}" selected="selected">{{ $accounts[$i]->name }}</option>
+                @else
                 <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>
+                @endif                
               @endfor
             </select>
           </div>
@@ -96,7 +107,11 @@
             <select type="text" class="form-control" id="paymentId" name="paymentId">
               <option value=""></option>
               @for ($i = 0; $i < count($payments); $i++)
+                @if ($payments[$i]->id == $outgoing->payment_id)
+                <option value="{{ $payments[$i]->id }}" selected="selected">{{ $payments[$i]->name }}</option>
+                @else
                 <option value="{{ $payments[$i]->id }}">{{ $payments[$i]->name }}</option>
+                @endif
               @endfor
             </select>
           </div>
@@ -108,7 +123,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label for="tradeDate">日付</label>
-            <input type="text" class="form-control" id="tradeDate" name="tradeDate" placeholder="" value="{{ $today }}">
+            <input type="text" class="form-control" id="tradeDate" name="tradeDate" placeholder="" value="{{ $outgoing->tradeDate or $today }}">
           </div>
         </div>
         <!-- ▲ 取引日 -->
@@ -118,7 +133,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label for="settleDate">決済日</label>
-            <input type="text" class="form-control" id="settleDate" name="settleDate" placeholder="" value="{{ $today }}">
+            <input type="text" class="form-control" id="settleDate" name="settleDate" placeholder="" value="{{ $outgoing->settleDate or $today }}">
           </div>
         </div>
         <!-- ▲ 決済日 -->

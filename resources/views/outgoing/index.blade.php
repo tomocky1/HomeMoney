@@ -149,14 +149,14 @@
 <tbody>
 <tr>
 <td class="text-center">{{ $outgoings[$i]->outgoing_no }}</td>
-<td>{{ $outgoings[$i]->summery }}</td>
+<td class="text-center">{{ $outgoings[$i]->summery }}</td>
 <td class="text-center">{{ $outgoings[$i]->account->name }}</td>
 <td class="text-center">{{ $outgoings[$i]->payment->name }}</td>
 <td class="text-center">{{ $outgoings[$i]->amount }}&nbsp;円</td>
 <td class="text-center">{{ $outgoings[$i]->trade_date->format('Y-m-d') }}</td>
 <td class="text-center">{{ $outgoings[$i]->settle_date->format('Y-m-d') }}</td>
-<td class="text-center"><form action="{{ route('outgoing.create', ['id' => $outgoings[$i]->id ]) }}" method="GET"><button type="submit" class="btn">修正</button></form></td>
-<td class="text-center"><form action="{{ route('outgoing.store', ['id' => $outgoings[$i]->id ]) }}" method="GET"><button type="submit" class="btn">削除</button></form></td>
+<td class="text-center"><form action="{{ route('outgoing.edit', ['id' => $outgoings[$i]->id ]) }}" method="GET"><button type="submit" class="btn">修正</button></form></td>
+<td class="text-center"><form action="{{ route('outgoing.delete', ['id' => $outgoings[$i]->id ]) }}" method="GET"><button type="submit" class="btn">削除</button></form></td>
 </tr>
 </tbody>
 @endfor
