@@ -13,12 +13,17 @@ use HomeMoney\Models\DateNumbering;
 
 class IncomeController extends Controller
 {
+	public function __construct()
+	{
+        $this->middleware('auth');
+	}
+	
     public function index(IncomeIndexRequest $request)
     {
     	// 一覧表示用の収入を取得
     	$builder = Income::where('delete_flag', false);
     	
-    	// 日付の範囲が指定された板場合
+    	// 日付の範囲が指定された場合
     	if(isset($request->tradeDateRange)) {
     		$tradeDateFrom = Carbon::createFromFormat('Y年m月d日', explode(" - ", $request->tradeDateRange)[0]);
     		$tradeDateTo = Carbon::createFromFormat('Y年m月d日', explode(" - ", $request->tradeDateRange)[1]);

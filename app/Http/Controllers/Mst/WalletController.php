@@ -1,13 +1,19 @@
 <?php
 
-namespace HomeMoney\Http\Controllers;
+namespace HomeMoney\Http\Controllers\Mst;
 
+use HomeMoney\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use HomeMoney\Models\Wallet;
 use HomeMoney\Http\Requests\WalletMgtStoreRequest;
 
 class WalletController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+	
 	public function index()
 	{
 		$data['wallets'] = Wallet::where('sys_deleted_flag', '0')->where('enable_flag', true)->orderBy('dorder', 'asc')->get();

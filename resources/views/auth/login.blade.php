@@ -79,6 +79,34 @@
 </div>
 <!-- /.login-box -->
 
+<!-- ▼ メッセージダイアログ -->
+<div class="modal modal-default fade" id="modal-message">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">
+          @if(session('param') == "logout")
+            ログアウト
+          @endif
+        </h4>
+      </div>
+      <div class="modal-body" id="err-modal">
+        @if(session('param') == "logout")
+          ログアウトしました
+        @endif
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- ▲ メッセージダイアログ -->
+
 <!-- jQuery 3 -->
 <script src="{{ asset('assets/AdminLTE/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -92,6 +120,9 @@
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' // optional
     });
+    @if(session('param'))
+    	$('#modal-message').modal();
+    @endif
   });
 </script>
 </body>

@@ -1,7 +1,8 @@
 <?php
 
-namespace HomeMoney\Http\Controllers;
+namespace HomeMoney\Http\Controllers\Mst;
 
+use HomeMoney\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use HomeMoney\Models\Payment;
 use HomeMoney\Models\Wallet;

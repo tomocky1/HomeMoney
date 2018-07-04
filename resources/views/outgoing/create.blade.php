@@ -89,10 +89,12 @@
             <select type="text" class="form-control" id="accountId" name="accountId" placeholder="">
               <option value=""></option>
               @for ($i = 0; $i < count($accounts); $i++)
-                @if ($accounts[$i]->id == $outgoing->account_id)
-                <option value="{{ $accounts[$i]->id }}" selected="selected">{{ $accounts[$i]->name }}</option>
-                @else
-                <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>
+                @if (isset($editFlag))
+                  @if ($accounts[$i]->id == $outgoing->account_id)
+                  <option value="{{ $accounts[$i]->id }}" selected="selected">{{ $accounts[$i]->name }}</option>
+                  @else
+                  <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>
+                  @endif
                 @endif                
               @endfor
             </select>
@@ -107,10 +109,12 @@
             <select type="text" class="form-control" id="paymentId" name="paymentId">
               <option value=""></option>
               @for ($i = 0; $i < count($payments); $i++)
-                @if ($payments[$i]->id == $outgoing->payment_id)
-                <option value="{{ $payments[$i]->id }}" selected="selected">{{ $payments[$i]->name }}</option>
-                @else
-                <option value="{{ $payments[$i]->id }}">{{ $payments[$i]->name }}</option>
+                @if (isset($editFlag))
+                  @if ($payments[$i]->id == $outgoing->payment_id)
+                  <option value="{{ $payments[$i]->id }}" selected="selected">{{ $payments[$i]->name }}</option>
+                  @else
+                  <option value="{{ $payments[$i]->id }}">{{ $payments[$i]->name }}</option>
+                  @endif
                 @endif
               @endfor
             </select>

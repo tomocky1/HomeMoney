@@ -13,6 +13,11 @@ use HomeMoney\Models\DateNumbering;
 
 class OutGoingController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+	
     public function index(OutGoingIndexRequest $request)
     {
     	// 一覧表示用の収入を取得

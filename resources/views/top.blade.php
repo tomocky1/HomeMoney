@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'メニュー');
+@section('title', 'メニュー')
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -11,10 +11,6 @@
       メニュー
       <small></small>
     </h1>
-    <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-      <li class="active">Here</li>
-    </ol>
   </section>
 
   <!-- Main content -->

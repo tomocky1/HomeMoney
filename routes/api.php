@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/Account/store', 'Api\AccountController@store')->name('api.Account.store');
 Route::get('/Test', 'Api\TestController@index')->name('api.Test.index');
+Route::middleware('auth:api')->get('/Account', 'Api\AccountController@index')->name('api.Account.index');

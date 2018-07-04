@@ -10,6 +10,11 @@ use HomeMoney\Http\Requests\ReceiptStoreRequest;
 
 class ReceiptController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+	
 	/**
 	 * 受取方法管理の管理画面
 	 */

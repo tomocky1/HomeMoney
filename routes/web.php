@@ -22,16 +22,16 @@ Auth::routes();
 
 // マスタ関連
 // 財布
-Route::get('Wallet', 'WalletController@index')->name('wallet.index');
-Route::post('Wallet', 'WalletController@store')->name('wallet.store');
-Route::get('Wallet/delete/{id}', 'WalletController@delete')->name('wallet.delete');
-Route::get('Wallet/edit/{id}', 'WalletController@edit')->name('wallet.edit');
+Route::get('Wallet', 'Mst\WalletController@index')->name('wallet.index');
+Route::post('Wallet', 'Mst\WalletController@store')->name('wallet.store');
+Route::get('Wallet/delete/{id}', 'Mst\WalletController@delete')->name('wallet.delete');
+Route::get('Wallet/edit/{id}', 'Mst\WalletController@edit')->name('wallet.edit');
 
 // 支払い方法
-Route::get('Payment', 'PaymentController@index')->name('payment.index');
-Route::post('Payment', 'PaymentController@store')->name('payment.store');
-Route::get('Payment/delete/{id}', 'PaymentController@destroy')->name('payment.delete');
-Route::get('Payment/edit/{id}', 'PaymentController@edit')->name('payment.edit');
+Route::get('Payment', 'Mst\PaymentController@index')->name('payment.index');
+Route::post('Payment', 'Mst\PaymentController@store')->name('payment.store');
+Route::get('Payment/delete/{id}', 'Mst\PaymentController@destroy')->name('payment.delete');
+Route::get('Payment/edit/{id}', 'Mst\PaymentController@edit')->name('payment.edit');
 
 // 受取方法
 Route::get('Receipt', 'Mst\ReceiptController@index')->name('receipt.index');
@@ -45,6 +45,7 @@ Route::get('Account/edit/{id}', 'Mst\AccountController@edit')->name('account.edi
 Route::post('Account/store', 'Mst\AccountController@store')->name('account.store');
 Route::get('Account/delete/{id}', 'Mst\AccountController@delete')->name('account.delete');
 
+// トランザクション
 // 収入
 Route::get('Income', 'IncomeController@index')->name('income.index');
 Route::post('Income', 'IncomeController@index')->name('income.search');
@@ -61,6 +62,5 @@ Route::get('OutGoing/delete/{id}', 'OutGoingController@delete')->name('outgoing.
 
 
 // その他のコントローラ
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/test', 'TestController@index')->name('test');
 //Route::post('/api/Account/store', 'AccountController@apistore')->name('api.Account.store');
+Route::get('Test', 'TestController@index')->name('test.index');

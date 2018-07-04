@@ -16,12 +16,13 @@ $(document).ready(function(){
 			  }
 			});
 		$.ajax({
-			url:"/api/Test",
+			url:"/api/Account",
 			type:"GET",
-			dataType:"text",
+			dataType:"json",
 		})
 		.done(function(data){
-			$("#response1").text(data);
+			$("#response1").text(data[0].id);
+			console.log(data[0].id);
 		});
 		;
 	});

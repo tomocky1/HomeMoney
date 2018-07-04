@@ -4,6 +4,7 @@ namespace HomeMoney\Http\Controllers\Auth;
 
 use HomeMoney\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -25,8 +26,22 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/top';
-
+    public $redirectTo = '/top';
+/*
+    public function showLoginForm($param = null)
+    {
+    	return view('auth.login', array('param' => $param));
+    }
+*/
+    public function logout(Request $request)
+    {
+    	$this->guard()->logout();
+    
+    	$request->session()->invalidate();
+    
+    	return redirect()->route('login')->with('param', 'logout');
+    }
+    
     /**
      * Create a new controller instance.
      *

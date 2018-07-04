@@ -33,4 +33,11 @@ class Account extends Model
 		$this->sys_deleted_flag = false;
 		$this->save();
 	}
+	
+	public function deleteDefault()
+	{
+		$this->sys_deleted_flag = true;
+		$this->sys_deleted_at = Carbon::now();
+		$this->save();
+	}
 }

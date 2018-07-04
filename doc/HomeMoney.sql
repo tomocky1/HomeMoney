@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS date_numbering;
 DROP TABLE IF EXISTS moves;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS receipts;
+DROP TABLE IF EXISTS USERS;
 DROP TABLE IF EXISTS wallets;
 
 
@@ -287,6 +288,27 @@ CREATE TABLE trans
 ) WITHOUT OIDS;
 
 
+-- ユーザ
+CREATE TABLE USERS
+(
+	-- ID
+	id serial NOT NULL,
+	-- ユーザ名
+	name varchar NOT NULL,
+	-- メールアドレス
+	email varchar NOT NULL,
+	-- パスワード
+	password varchar NOT NULL,
+	-- トークン
+	remember_token varchar(100),
+	-- 作成日時
+	created_at timestamp,
+	-- 更新日時
+	updated_at timestamp,
+	PRIMARY KEY (id)
+) WITHOUT OIDS;
+
+
 -- 財布
 CREATE TABLE wallets
 (
@@ -509,6 +531,14 @@ COMMENT ON COLUMN trans.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN trans.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN trans.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN trans.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON TABLE USERS IS 'ユーザ';
+COMMENT ON COLUMN USERS.id IS 'ID';
+COMMENT ON COLUMN USERS.name IS 'ユーザ名';
+COMMENT ON COLUMN USERS.email IS 'メールアドレス';
+COMMENT ON COLUMN USERS.password IS 'パスワード';
+COMMENT ON COLUMN USERS.remember_token IS 'トークン';
+COMMENT ON COLUMN USERS.created_at IS '作成日時';
+COMMENT ON COLUMN USERS.updated_at IS '更新日時';
 COMMENT ON TABLE wallets IS '財布';
 COMMENT ON COLUMN wallets.id IS 'ID';
 COMMENT ON COLUMN wallets.name IS '財布名称';
