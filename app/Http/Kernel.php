@@ -57,5 +57,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \HomeMoney\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+    	'auth.basic.once' => \HomeMoney\Http\Middleware\AuthenticateOnceWithBasicAuth::class,
+    		
     ];
 }

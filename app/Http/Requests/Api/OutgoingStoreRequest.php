@@ -1,11 +1,10 @@
 <?php
 
-namespace HomeMoney\Http\Requests;
+namespace HomeMoney\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
-use HomeMoney\Rules\Yen;
 
-class OutGoingStoreRequest extends FormRequest
+class OutgoingStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +24,7 @@ class OutGoingStoreRequest extends FormRequest
     public function rules()
     {
         return [
-        'accountId' => 'required',
-        'paymentId' => 'required',
-        'summery'    => 'required',
-        'amount'     => ['required', new Yen() ],
-        'tradeDate' => 'required|date_format:Y年m月d日',
-        'settleDate' => 'required|date_format:Y年m月d日',
+            //
         ];
     }
 }

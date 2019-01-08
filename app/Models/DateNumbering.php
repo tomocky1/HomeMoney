@@ -18,16 +18,16 @@ class DateNumbering extends Model
 	/** 削除日時 */
 	protected $dates = ['deleted_at'];
 	
-	public static function getSingleDateNumber($class, $date)
+	public static function getSingleDateNumber(String $class, Carbon $date)
 	{
 		\DB::beginTransaction();
 		try {
 			// 該当レコードを悲観ロック
-			$dateNumbering = self::where('cls', $class)->where('ymd', $date)->lockForUpdate()->first();
+			$dateNumbering = self::where('clazz', $class)->where('ymd', $date)->lockForUpdate()->first();
 			if($dateNumbering == null)
 			{
 				$dateNumbering = new DateNumbering();
-				$dateNumbering->cls = $class;
+				$dateNumbering->clazz = $class;
 				$dateNumbering->ymd = $date;
 				$dateNumbering->val = 1;
 				$dateNumbering->sys_deleted_flag = false;
@@ -37,7 +37,13 @@ class DateNumbering extends Model
 				$dateNumbering->save();
 			}
 			\DB::commit();
-			return $dateNumbering->val;
+			
+			if($class == '0001') {
+				$result = $date->format('ymd') . sprintf('%05d', $dateNumbering->val);
+			} else if($class == '0002') {
+				$result = $date->format('ymd') . sprintf('%05d', $dateNumbering->val);
+			}
+			return $result;
 		} catch (\Exception $e) {
 			\DB::rollback();
 			throw $e;

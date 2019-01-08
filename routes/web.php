@@ -53,12 +53,12 @@ Route::get('Income/create', 'IncomeController@create')->name('income.create');
 Route::post('Income/store', 'IncomeController@store')->name('income.store');
 
 // 支出
-Route::get('OutGoing', 'OutGoingController@index')->name('outgoing.index');
-Route::post('OutGoing', 'OutGoingController@index')->name('outgoing.search');
-Route::get('OutGoing/create', 'OutGoingController@create')->name('outgoing.create');
-Route::post('OutGoing/store', 'OutGoingController@store')->name('outgoing.store');
-Route::get('OutGoing/edit/{id}', 'OutGoingController@edit')->name('outgoing.edit');
-Route::get('OutGoing/delete/{id}', 'OutGoingController@delete')->name('outgoing.delete');
+Route::get('Outgoing', 'OutgoingController@index')->name('outgoing.index');
+Route::post('Outgoing', 'OutgoingController@index')->name('outgoing.search');
+Route::get('Outgoing/create', 'OutgoingController@create')->name('outgoing.create');
+Route::post('Outgoing/store', 'OutgoingController@store')->name('outgoing.store');
+Route::get('Outgoing/edit/{id}', 'OutgoingController@edit')->name('outgoing.edit');
+Route::get('Outgoing/delete/{id}', 'OutgoingController@delete')->name('outgoing.delete');
 
 
 // その他のコントローラ

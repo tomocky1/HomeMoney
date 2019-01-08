@@ -139,7 +139,7 @@ $(function(){
             errFlag = false;
         }
         if(errFlag) {
-            $('#walletForm').submit();
+            $('#accountForm').submit();
         } else {
             $("#err-modal").html(errMes);
             $('#modal-default').modal();

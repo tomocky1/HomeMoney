@@ -3,22 +3,22 @@
 namespace HomeMoney\Http\Controllers;
 
 use Illuminate\Http\Request;
-use HomeMoney\Http\Requests\OutGoingIndexRequest;
+use HomeMoney\Http\Requests\OutgoingIndexRequest;
 use HomeMoney\Models\OutGoing;
 use HomeMoney\Models\Account;
 use HomeMoney\Models\Payment;
 use Carbon\Carbon;
-use HomeMoney\Http\Requests\OutGoingStoreRequest;
+use HomeMoney\Http\Requests\OutgoingStoreRequest;
 use HomeMoney\Models\DateNumbering;
 
-class OutGoingController extends Controller
+class OutgoingController extends Controller
 {
 	public function __construct()
 	{
 		$this->middleware('auth');
 	}
 	
-    public function index(OutGoingIndexRequest $request)
+    public function index(OutgoingIndexRequest $request)
     {
     	// 一覧表示用の収入を取得
     	$builder = OutGoing::where('delete_flag', false);
@@ -89,7 +89,7 @@ class OutGoingController extends Controller
     	return view('outgoing.create', $data);
     }
     
-    public function store(OutGoingStoreRequest $request)
+    public function store(OutgoingStoreRequest $request)
     {
     	$outgoing = new OutGoing();
     	$outgoing->account_id = $request->accountId;

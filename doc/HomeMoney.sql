@@ -69,7 +69,9 @@ CREATE TABLE date_numbering
 	id bigserial NOT NULL,
 	-- 採番種別 : 種別
 	-- 0001：収入番号
-	cls int NOT NULL,
+	-- 0002：支出番号
+	-- 0003：移動番号
+	clazz char(4) NOT NULL,
 	-- 日付
 	ymd date NOT NULL,
 	-- 採番値
@@ -121,7 +123,8 @@ CREATE TABLE incomes
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	CONSTRAINT UNIQUE_INCOMES_INCOMENO_TRADEDATE UNIQUE (income_no, trade_date)
 ) WITHOUT OIDS;
 
 
@@ -158,7 +161,8 @@ CREATE TABLE moves
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	CONSTRAINT UNIQUE_MOVES_MOVENO_TRADEDATE UNIQUE (move_no, trade_date)
 ) WITHOUT OIDS;
 
 
@@ -197,7 +201,8 @@ CREATE TABLE outgoings
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	CONSTRAINT UNIQUE_OUTGOINGS_OUTGOINGNO_TRADEDATE UNIQUE (outgoing_no, trade_date)
 ) WITHOUT OIDS;
 
 
@@ -301,6 +306,8 @@ CREATE TABLE USERS
 	password varchar NOT NULL,
 	-- トークン
 	remember_token varchar(100),
+	-- APIトークン
+	api_token varchar(60),
 	-- 作成日時
 	created_at timestamp,
 	-- 更新日時
@@ -437,8 +444,10 @@ COMMENT ON COLUMN balances.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN balances.sys_deleted_flag IS 'SYS削除フラグ';
 COMMENT ON TABLE date_numbering IS '日別採番';
 COMMENT ON COLUMN date_numbering.id IS 'ID';
-COMMENT ON COLUMN date_numbering.cls IS '採番種別 : 種別
-0001：収入番号';
+COMMENT ON COLUMN date_numbering.clazz IS '採番種別 : 種別
+0001：収入番号
+0002：支出番号
+0003：移動番号';
 COMMENT ON COLUMN date_numbering.ymd IS '日付';
 COMMENT ON COLUMN date_numbering.val IS '採番値';
 COMMENT ON COLUMN date_numbering.sys_created_at IS 'SYS登録日時';
@@ -537,6 +546,7 @@ COMMENT ON COLUMN USERS.name IS 'ユーザ名';
 COMMENT ON COLUMN USERS.email IS 'メールアドレス';
 COMMENT ON COLUMN USERS.password IS 'パスワード';
 COMMENT ON COLUMN USERS.remember_token IS 'トークン';
+COMMENT ON COLUMN USERS.api_token IS 'APIトークン';
 COMMENT ON COLUMN USERS.created_at IS '作成日時';
 COMMENT ON COLUMN USERS.updated_at IS '更新日時';
 COMMENT ON TABLE wallets IS '財布';

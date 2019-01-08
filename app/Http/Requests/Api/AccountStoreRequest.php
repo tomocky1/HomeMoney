@@ -1,10 +1,10 @@
 <?php
 
-namespace HomeMoney\Http\Requests;
+namespace HomeMoney\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OutGoingIndexRequest extends FormRequest
+class AccountStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class OutGoingIndexRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
