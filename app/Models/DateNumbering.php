@@ -3,6 +3,7 @@
 namespace HomeMoney\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class DateNumbering extends Model
 {

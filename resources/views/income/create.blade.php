@@ -263,8 +263,6 @@
 				errMes = errMes + "<p>決済日の入力形式が不正です</p>";
 				errFlag = false;
 			}
-
-			$('#incomeForm').submit();
 			
 			if (errFlag) {
 				$('#registConfirmDialog').modal();

@@ -41,6 +41,10 @@ class IncomeController extends Controller
     		$builder->where('receipt_id', $request->receiptId);
     	}
     	
+    	// 最新のものから表示する
+    	$builder->orderby('trade_date', 'desc');
+    	$builder->orderby('sys_updated_at', 'desc');
+    	
     	// 収入一覧データを取得
     	$data['incomes'] = $builder->get();
     	
