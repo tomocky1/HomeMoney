@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use HomeMoney\Http\Controllers\Controller;
 use HomeMoney\Http\Requests\AccountStoreRequest;
 use HomeMoney\Models\Account;
+use HomeMoney\Models\Receipt;
 
 /**
  * 勘定科目の登録・編集
@@ -47,7 +48,7 @@ class AccountController extends Controller
     
     /**
      * 勘定科目を削除
-     * @param unknown $id
+     * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function delete($id)
@@ -62,7 +63,7 @@ class AccountController extends Controller
     
     /**
      * 勘定科目修正画面を開く
-     * @param unknown $id
+     * @param $id
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit($id)

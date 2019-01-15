@@ -10,12 +10,17 @@ use HomeMoney\Models\Account;
 use HomeMoney\Models\Receipt;
 use HomeMoney\Http\Requests\IncomeStoreRequest;
 use HomeMoney\Models\DateNumbering;
+use HomeMoney\Services\IncomeServiceInterface;
 
 class IncomeController extends Controller
 {
-	public function __construct()
+	
+	private $incomeService;
+	
+	public function __construct(IncomeServiceInterface $incomeServiceInterface)
 	{
         $this->middleware('auth');
+        $this->incomeService = $incomeServiceInterface;
 	}
 	
     public function index(IncomeIndexRequest $request)
@@ -76,19 +81,9 @@ class IncomeController extends Controller
     
     public function store(IncomeStoreRequest $request)
     {
-    	$income = new Income();
-    	$income->account_id = $request->accountId;
-    	$income->receipt_id = $request->receiptId;
-    	$income->income_no = DateNumbering::getSingleDateNumber("0001", Carbon::today());
-    	$income->summery = $request->summery;
-    	$income->amount = str_replace(" 円", "", str_replace(",", "", $request->amount));
-    	$income->trade_date = Carbon::createFromFormat('Y年m月d日', $request->tradeDate);
-    	$income->settle_date = Carbon::createFromFormat('Y年m月d日', $request->settleDate);
-    	$income->regist_tsp = Carbon::now();
-    	$income->modify_flag = false;
-    	$income->delete_flag = false;
-    	$income->sys_deleted_flag = false;
-    	$income->save();
+    	\DB::transaction(function() use($request) {
+    	    $this->incomeService->store($request);
+    	}, 5);
     	
     	return redirect()->route('income.create');
     }

@@ -5,6 +5,7 @@ namespace HomeMoney\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use HomeMoney\Http\Controllers\Controller;
 use HomeMoney\Models\Account;
+use HomeMoney\Models\Receipt;
 use HomeMoney\Http\Requests\Api\AccountStoreRequest;
 
 class AccountController extends Controller

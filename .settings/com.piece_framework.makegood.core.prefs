@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 phpunit_config_file=/HomeMoney/phpunit.xml
-preload_script=/HomeMoney/vendor/autoload.php
+preload_script=/HomeMoney/makegood_preload.php
 test_file_pattern=
 test_folders=/HomeMoney/tests
 testing_framework=PHPUnit

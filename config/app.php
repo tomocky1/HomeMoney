@@ -181,6 +181,7 @@ return [
         HomeMoney\Providers\EventServiceProvider::class,
         HomeMoney\Providers\RouteServiceProvider::class,
 
+   		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

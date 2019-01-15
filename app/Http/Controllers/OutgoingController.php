@@ -10,12 +10,16 @@ use HomeMoney\Models\Payment;
 use Carbon\Carbon;
 use HomeMoney\Http\Requests\OutgoingStoreRequest;
 use HomeMoney\Models\DateNumbering;
+use HomeMoney\Services\OutgoingServiceInterface;
 
 class OutgoingController extends Controller
 {
-	public function __construct()
+	private $outgoingService;
+	
+	public function __construct(OutgoingServiceInterface $outgoingServiceInterface)
 	{
 		$this->middleware('auth');
+		$this->outgoingService = $outgoingServiceInterface;
 	}
 	
     public function index(OutgoingIndexRequest $request)
@@ -91,19 +95,10 @@ class OutgoingController extends Controller
     
     public function store(OutgoingStoreRequest $request)
     {
-    	$outgoing = new OutGoing();
-    	$outgoing->account_id = $request->accountId;
-    	$outgoing->payment_id = $request->paymentId;
-    	$outgoing->outgoing_no = DateNumbering::getSingleDateNumber("0002", Carbon::today());
-    	$outgoing->summery = $request->summery;
-    	$outgoing->amount = str_replace(" 円", "", str_replace(",", "", $request->amount));
-    	$outgoing->trade_date = Carbon::createFromFormat('Y年m月d日', $request->tradeDate);
-    	$outgoing->settle_date = Carbon::createFromFormat('Y年m月d日', $request->settleDate);
-    	$outgoing->regist_tsp = Carbon::now();
-    	$outgoing->modify_flag = false;
-    	$outgoing->delete_flag = false;
-    	$outgoing->sys_deleted_flag = false;
-    	$outgoing->save();
+    	\DB::transaction(function() use($request) {
+    		$this->outgoingService->store($request);
+    	}, 5);
+    		
     	 
     	return redirect()->route('outgoing.create');
     }

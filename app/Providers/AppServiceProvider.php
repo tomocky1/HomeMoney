@@ -5,6 +5,8 @@ namespace HomeMoney\Providers;
 use Illuminate\Support\ServiceProvider;
 use HomeMoney\Services\AccountService;
 use HomeMoney\Services\AccountServiceInterface;
+use HomeMoney\Services\IncomeService;
+use HomeMoney\Services\IncomeServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
     	$this->app->singleton(AccountServiceInterface::class, AccountService::class);
+    	$this->app->singleton(IncomeServiceInterface::class, IncomeService::class);
     }
 }

@@ -47,7 +47,7 @@ CREATE TABLE balances
 	-- id
 	id bigserial NOT NULL,
 	-- 財布ID
-	wallet_id bigserial NOT NULL,
+	wallet_id bigserial NOT NULL UNIQUE,
 	-- 残高
 	balance bigint NOT NULL,
 	-- SYS登録日時
