@@ -81,6 +81,9 @@ class OutgoingController extends Controller
     
     public function create()
     {
+    	// 画面表示用の配列
+    	$data = array();
+    	
     	// 選択用の勘定科目
     	$data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'desc')->get();
     	 

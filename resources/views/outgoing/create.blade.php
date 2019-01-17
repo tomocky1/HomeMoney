@@ -95,7 +95,9 @@
                   @else
                   <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>
                   @endif
-                @endif                
+                @else
+                  <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>
+                @endif
               @endfor
             </select>
           </div>
@@ -115,6 +117,8 @@
                   @else
                   <option value="{{ $payments[$i]->id }}">{{ $payments[$i]->name }}</option>
                   @endif
+                @else
+                  <option value="{{ $payments[$i]->id }}">{{ $payments[$i]->name }}</option>
                 @endif
               @endfor
             </select>
