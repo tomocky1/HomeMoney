@@ -55,9 +55,11 @@ class IncomeService implements IncomeServiceInterface
 			$balance = new Balance();
 			$balance->wallet_id = $receipt->wallet_id;
 			$balance->balance = $amount;
+			$balance->update_tsp = Carbon::now();
 			$balance->sys_deleted_flag = false;
 		} else {
 			$balance->balance = $balance->balance + $amount;
+			$balance->update_tsp = Carbon::now();
 		}
 		$balance->save();
 	}

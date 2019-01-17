@@ -43,6 +43,8 @@ class DateNumbering extends Model
 				$result = $date->format('ymd') . sprintf('%05d', $dateNumbering->val);
 			} else if($class == '0002') {
 				$result = $date->format('ymd') . sprintf('%05d', $dateNumbering->val);
+			} else if($class == '0003') {
+				$result = $date->format('ymd') . sprintf('%05d', $dateNumbering->val);
 			}
 			return $result;
 		} catch (\Exception $e) {

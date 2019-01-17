@@ -116,7 +116,7 @@
     <table id="paymentList" class="table table-bordered table-hover">
       <thead>
       <tr>
-        <th class="col-md-5 text-center">支払方法</th>
+        <th class="col-md-5 text-left">支払方法</th>
         <th class="col-md-4 text-center">財布</th>
         <th class="col-md-1 text-center">表示順</th>
         <th class="col-md-1 text-center">修正</th>
@@ -126,7 +126,7 @@
       @for($i = 0; $i < count($payments); $i++)
       <tbody>
       <tr>
-        <td class="text-center">{{ $payments[$i]->name }}</td>
+        <td class="text-left">{{ $payments[$i]->name }}</td>
         <td class="text-center">{{ $payments[$i]->wallet->name }}</td>
         <td class="text-center">{{ $payments[$i]->dorder }}</td>
         <td class="text-center"><form action="{{ route('payment.edit', ['id' => $payments[$i]->id ]) }}" method="GET"><button type="submit" class="btn">修正</button></form>

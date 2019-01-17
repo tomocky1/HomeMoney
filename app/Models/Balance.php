@@ -15,8 +15,8 @@ class Balance extends Model
 	/** 更新日時 */
 	const UPDATED_AT = 'sys_updated_at';
 	
-	/** 削除日時 */
-	protected $dates = ['trade_date', 'settle_date', 'deleted_at'];
+	/** 日時 */
+	protected $dates = ['update_tsp', 'trade_date', 'settle_date', 'deleted_at'];
 	
 	/**
 	 * 財布エンティティ
@@ -24,7 +24,7 @@ class Balance extends Model
 	 */
 	public function wallet()
 	{
-		return $this->belongsTo("'HomeMoney\Models\Wallet", 'wallet_id', 'id');
+		return $this->hasOne("HomeMoney\Models\Wallet", 'id', 'wallet_id');
 	}
 	
 }

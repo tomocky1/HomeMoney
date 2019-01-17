@@ -136,6 +136,32 @@ desired effect
           </ul>
         </li>
         <!-- ▲ 支出-->
+
+        <!-- ▼ 移動 -->
+        <li class="@yield('menu_move') treeview">
+          <a href="{{ route('move.index') }}"><span>移動</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="@yield('menu_move_regist')"><a href="{{ route('move.create') }}">移動登録</a></li>
+          </ul>
+        </li>
+        <!-- ▲ 移動-->
+
+        <!-- ▼ 残高 -->
+        <li class="@yield('menu_balance') treeview">
+          <a href="{{ route('balance.index') }}"><span>残高</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="@yield('menu_balance_list')"><a href="{{ route('balance.index') }}">残高一覧</a></li>
+          </ul>
+        </li>
+        <!-- ▲ 残高-->
      
         <!-- ▼ マスタ管理 -->
         <li class="@yield('menu_master') treeview">

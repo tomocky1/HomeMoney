@@ -9,6 +9,8 @@ use HomeMoney\Services\IncomeService;
 use HomeMoney\Services\IncomeServiceInterface;
 use HomeMoney\Services\OutgoingService;
 use HomeMoney\Services\OutgoingServiceInterface;
+use HomeMoney\Services\MoveService;
+use HomeMoney\Services\MoveServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
     	$this->app->singleton(AccountServiceInterface::class, AccountService::class);
     	$this->app->singleton(IncomeServiceInterface::class, IncomeService::class);
     	$this->app->singleton(OutgoingServiceInterface::class, OutgoingService::class);
+    	$this->app->singleton(MoveServiceInterface::class, MoveService::class);
     }
 }

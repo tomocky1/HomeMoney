@@ -60,6 +60,14 @@ Route::post('Outgoing/store', 'OutgoingController@store')->name('outgoing.store'
 Route::get('Outgoing/edit/{id}', 'OutgoingController@edit')->name('outgoing.edit');
 Route::get('Outgoing/delete/{id}', 'OutgoingController@delete')->name('outgoing.delete');
 
+// 移動
+Route::get('Move', 'MoveController@index')->name('move.index');
+Route::get('Move/create', 'MoveController@create')->name('move.create');
+Route::post('Move/store', 'MoveController@store')->name('move.store');
+
+// 残高
+Route::get('Balance', 'BalanceController@index')->name('balance.index');
+
 
 // その他のコントローラ
 //Route::post('/api/Account/store', 'AccountController@apistore')->name('api.Account.store');

@@ -1,10 +1,9 @@
-
 @extends('layouts.layout')
 
-@section('title', '支出登録')
+@section('title', '移動登録')
 
-@section('menu_outgoing', 'active')
-@section('menu_outgoing_regist', 'active')
+@section('menu_move', 'active')
+@section('menu_move_regist', 'active')
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -12,8 +11,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
 <h1>
-支出
-<small>支出の登録</small>
+移動
+<small>移動の登録</small>
 </h1>
 <ol class="breadcrumb">
 <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -38,19 +37,12 @@
 
   <!-- .box-header -->
   <div class="box-header">
-    @if (isset($editFlag))
-    <h3 class="box-title">修正</h3>
-    @else
     <h3 class="box-title">登録</h3>
-    @endif    
   </div>
   <!-- /.box-header -->
   
   <!-- form start -->
-  <form action="{{ route('outgoing.store') }}" method="POST" id="outgoingForm">
-    @if (isset($editFlag))
-    <input type="hidden" name="id" id="id" value="{{ $outgoing->id }}" />
-    @endif  
+  <form action="{{ route('move.store') }}" method="POST" id="moveForm">
   {{ csrf_field() }}
     <div class="box-body">
     
@@ -61,7 +53,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="summery">摘要</label>
-            <input type="text" class="form-control" id="summery" name="summery" value="{{ $outgoing->summery or '' }}" />
+            <input type="text" class="form-control" id="summery" name="summery" placeholder="">
           </div>
         </div>
         <!-- ▲ 摘要 -->
@@ -70,7 +62,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label for="amount">金額</label>
-            <input type="text" class="form-control text-right yen" id="amount" name="amount" value="{{ $outgoing->amount or '' }}" />
+            <input type="text" class="form-control text-right" id="amount" name="amount" placeholder="円" />
           </div>
         </div>
         <!-- ▲ 金額 -->
@@ -81,63 +73,50 @@
       <!-- ▲ １行目 -->
 
       <!-- ▼ ２行目 -->
-      <div class="row">
-        <!-- ▼ 勘定科目 -->
+	  <div class="row">
+        <!-- ▼ 移動元財布 -->
         <div class="col-md-2">
           <div class="form-group">
-            <label for="accountId">勘定科目</label>
-            <select type="text" class="form-control" id="accountId" name="accountId" placeholder="">
+            <label for="accountId">移動元財布</label>
+            <select type="text" class="form-control" id="srcWalletId" name="srcWalletId" placeholder="">
               <option value=""></option>
-              @for ($i = 0; $i < count($accounts); $i++)
-                @if (isset($editFlag))
-                  @if ($accounts[$i]->id == $outgoing->account_id)
-                  <option value="{{ $accounts[$i]->id }}" selected="selected">{{ $accounts[$i]->name }}</option>
-                  @else
-                  <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>
-                  @endif
-                @endif                
+              @for ($i = 0; $i < count($wallets); $i++)
+                <option value="{{ $wallets[$i]->id }}">{{ $wallets[$i]->name }}</option>
               @endfor
             </select>
           </div>
         </div>
-        <!-- ▲ 勘定科目 -->
+        <!-- ▲ 移動元財布 -->
         
-        <!-- ▼ 支払方法 -->
+        <!-- ▼ 移動先財布 -->
         <div class="col-md-2">
           <div class="form-group">
-            <label for="paymentId">支払方法</label>
-            <select type="text" class="form-control" id="paymentId" name="paymentId">
+            <label for="receiptId">移動先財布</label>
+            <select type="text" class="form-control" id="distWalletId" name="distWalletId" placeholder="">
               <option value=""></option>
-              @for ($i = 0; $i < count($payments); $i++)
-                @if (isset($editFlag))
-                  @if ($payments[$i]->id == $outgoing->payment_id)
-                  <option value="{{ $payments[$i]->id }}" selected="selected">{{ $payments[$i]->name }}</option>
-                  @else
-                  <option value="{{ $payments[$i]->id }}">{{ $payments[$i]->name }}</option>
-                  @endif
-                @endif
+              @for ($i = 0; $i < count($wallets); $i++)
+                <option value="{{ $wallets[$i]->id }}">{{ $wallets[$i]->name }}</option>
               @endfor
             </select>
           </div>
         </div>
-        <!-- ▲ 支払方法 -->
+        <!-- ▲ 移動先財布 -->
         
-        
+
         <!-- ▼ 取引日 -->
         <div class="col-md-2">
           <div class="form-group">
-            <label for="tradeDate">日付</label>
-            <input type="text" class="form-control" id="tradeDate" name="tradeDate" placeholder="" value="{{ $outgoing->tradeDate or $today }}">
+            <label for="tradeDate">取引日</label>
+            <input type="text" class="form-control" id="tradeDate" name="tradeDate" placeholder="" value="{{ $today }}">
           </div>
         </div>
         <!-- ▲ 取引日 -->
-        
         
         <!-- ▼ 決済日 -->
         <div class="col-md-2">
           <div class="form-group">
             <label for="settleDate">決済日</label>
-            <input type="text" class="form-control" id="settleDate" name="settleDate" placeholder="" value="{{ $outgoing->settleDate or $today }}">
+            <input type="text" class="form-control" id="settleDate" name="settleDate" placeholder="" value="{{ $today }}">
           </div>
         </div>
         <!-- ▲ 決済日 -->
@@ -219,72 +198,78 @@
 <!-- ▲ エラーダイアログ -->
 
 <script type="text/javascript">
-    $(function(){
+	$(function(){
 
-        // 日付にdatepickerを設定
-        $('#tradeDate').datepicker({
-            autoclose: true,
-            format: 'yyyy年mm月dd日'
+		// 決済日にdatepickerを設定
+	    $('#settleDate').datepicker({
+	        autoclose: true,
+	        format: 'yyyy年mm月dd日'
         });
 
-        // 決済日にdatepickerを設定
-        $('#settleDate').datepicker({
-            autoclose: true,
-            format: 'yyyy年mm月dd日'
-        });
-
-        // 摘要にフォーカスを設定
+        // フォーカスの初期値を摘要に設定
         $('#summery').focus();
 
-        // 登録ボタン押下 バリデーションを実行し登録確認ダイアログを表示
-        $('#btnSubmit').click(function(){
-            var errFlag = true;
-            var errMes = "";
-            if (isEmpty($("#summery").val())) {
-                errMes = errMes + "<p>摘要を入力してください</p>";
-                errFlag = false;
-            }
-            
-            if (isNotYen($('#amount').val())) {
-                errMes = errMes + "<p>金額を数値で入力してください</p>";
-                errFlag = false;
-            }
-
-            if (isEmpty($('#accountId').val())) {
-                errMes = errMes + "<p>勘定科目を入力してください</p>";
-                errFlag = false;
-            }
-
-            if (isEmpty($('#paymentId').val())) {
-                errMes = errMes + "<p>支払方法を入力してください</p>";
-                errFlag = false;
-            }
-            
-            if (isNotDate($("#tradeDate").val())) {
-                errMes = errMes + "<p>日付の入力形式が不正です</p>";
-                errFlag = false;
-            }
-
-            if (isNotDate($("#settleDate").val())) {
-                errMes = errMes + "<p>決済日の入力形式が不正です</p>";
-                errFlag = false;
-            }
-
-            if (errFlag) {
-                $('#registConfirmDialog').modal();
-				$('#notRegistBtn').focus();
-            } else {
-                $("#err-modal").html(errMes);
-                $('#errorDialog').modal();
-            }
-
+        // 金額を設定
+        $('#amount').focus(function() {
+            // カンマ・円を除去
+			if($('#amount').val().length =! 0) { $('#amount').val($('#amount').val().replace(' 円', '').replace(/,/g, '')); }
+            // 数値としての金額を退避する
+            $(this).data('bak', $('#amount').val());
+            // 選択状態にする
+            $(this).select();
         });
+
+        // 金額を設定
+        $('#amount').blur(function() {
+            // 数値でなければ、退避した金額から復旧
+            if($(this).val() == null || isNaN($(this).val())) { $(this).val($(this).data('bak')); }
+			$(this).val($(this).val().split(/(?=(?:\d{3})+$)/).join() + " 円");
+        });
+
+        // 登録ボタン押下 バリデーションを実行し登録確認ダイアログを表示
+		$('#btnSubmit').click(function(){
+			var errFlag = true;
+			var errMes = "";
+			if (isEmpty($("#summery").val())) {
+				errMes = errMes + "<p>摘要を入力してください</p>";
+				errFlag = false;
+			}
+			
+	        if (isNotYen($('#amount').val())) {
+				errMes = errMes + "<p>金額を数値で入力してください</p>";
+				errFlag = false;
+			}
+
+			if (isEmpty($('#srcWalletId').val())) {
+				errMes = errMes + "<p>移動元財布を入力してください</p>";
+				errFlag = false;
+			}
+
+			if (isEmpty($('#distWalletId').val())) {
+				errMes = errMes + "<p>移動先財布を入力してください</p>";
+				errFlag = false;
+			}
+
+			if (isNotDate($("#settleDate").val())) {
+				errMes = errMes + "<p>決済日の入力形式が不正です</p>";
+				errFlag = false;
+			}
+			
+			if (errFlag) {
+				$('#registConfirmDialog').modal();
+				$('#notRegistBtn').focus();
+			} else {
+				$("#err-modal").html(errMes);
+				$('#errorDialog').modal();
+			}
+
+		});
 
         // 確認ダイアログから登録を実行する
-        $('#registBtn').click(function() {
-            $('#outgoingForm').submit();
-        });
-    });
+		$('#registBtn').click(function() {
+			$('#moveForm').submit();
+		});
+	});
 </script>
 <!-- エラーダイアログ -->
 @endsection

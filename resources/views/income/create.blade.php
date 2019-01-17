@@ -188,8 +188,8 @@
         登録してもよろしいですか？
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="registBtn">登録する</button>
         <button type="button" class="btn btn-default" data-dismiss="modal" id="notRegistBtn">登録しない</button>
+        <button type="button" class="btn btn-primary data-dismiss="modal" id="registBtn">登録する</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -212,6 +212,9 @@
 	        autoclose: true,
 	        format: 'yyyy年mm月dd日'
         });
+
+        // 摘要にフォーカスを設定
+        $('#summery').focus();
 
         // 金額を設定
         $('#amount').focus(function() {
@@ -266,6 +269,7 @@
 			
 			if (errFlag) {
 				$('#registConfirmDialog').modal();
+				$('#notRegistBtn').focus();
 			} else {
 				$("#err-modal").html(errMes);
 				$('#errorDialog').modal();

@@ -50,6 +50,8 @@ CREATE TABLE balances
 	wallet_id bigserial NOT NULL UNIQUE,
 	-- 残高
 	balance bigint NOT NULL,
+	-- 更新日時
+	update_tsp timestamp NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -133,8 +135,10 @@ CREATE TABLE moves
 (
 	-- ID
 	id bigserial NOT NULL,
-	-- 財布ID
-	wallet_id bigint NOT NULL,
+	-- 移動元財布ID
+	src_wallet_id bigint NOT NULL,
+	-- 移動先財布ID
+	dist_wallet_id bigint NOT NULL,
 	-- 移動番号
 	move_no char(12) NOT NULL,
 	-- 摘要
@@ -148,11 +152,11 @@ CREATE TABLE moves
 	-- 登録日時
 	regist_tsp timestamp NOT NULL,
 	-- 修正フラグ
-	modify_flg boolean DEFAULT 'false' NOT NULL,
+	modify_flag boolean DEFAULT 'false' NOT NULL,
 	-- 修正前ID
 	id_bfr bigint,
 	-- 削除フラグ
-	delete_flg boolean NOT NULL,
+	delete_flag boolean NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -272,7 +276,7 @@ CREATE TABLE trans
 	-- 財布ID
 	wallet_id bigint NOT NULL,
 	-- 勘定科目ID
-	account_list_id bigserial,
+	account_list_id bigint,
 	-- 摘要
 	summery varchar NOT NULL,
 	-- 金額
@@ -399,7 +403,15 @@ ALTER TABLE incomes
 
 
 ALTER TABLE moves
-	ADD FOREIGN KEY (wallet_id)
+	ADD FOREIGN KEY (dist_wallet_id)
+	REFERENCES wallets (id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE moves
+	ADD FOREIGN KEY (src_wallet_id)
 	REFERENCES wallets (id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -438,6 +450,7 @@ COMMENT ON TABLE balances IS '残高';
 COMMENT ON COLUMN balances.id IS 'id';
 COMMENT ON COLUMN balances.wallet_id IS '財布ID';
 COMMENT ON COLUMN balances.balance IS '残高';
+COMMENT ON COLUMN balances.update_tsp IS '更新日時';
 COMMENT ON COLUMN balances.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN balances.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN balances.sys_deleted_at IS 'SYS削除日時';
@@ -473,16 +486,17 @@ COMMENT ON COLUMN incomes.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN incomes.sys_deleted_flag IS 'SYS削除フラグ';
 COMMENT ON TABLE moves IS '移動';
 COMMENT ON COLUMN moves.id IS 'ID';
-COMMENT ON COLUMN moves.wallet_id IS '財布ID';
+COMMENT ON COLUMN moves.src_wallet_id IS '移動元財布ID';
+COMMENT ON COLUMN moves.dist_wallet_id IS '移動先財布ID';
 COMMENT ON COLUMN moves.move_no IS '移動番号';
 COMMENT ON COLUMN moves.summery IS '摘要';
 COMMENT ON COLUMN moves.amount IS '金額';
 COMMENT ON COLUMN moves.trade_date IS '取引日';
 COMMENT ON COLUMN moves.settle_date IS '決済日';
 COMMENT ON COLUMN moves.regist_tsp IS '登録日時';
-COMMENT ON COLUMN moves.modify_flg IS '修正フラグ';
+COMMENT ON COLUMN moves.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN moves.id_bfr IS '修正前ID';
-COMMENT ON COLUMN moves.delete_flg IS '削除フラグ';
+COMMENT ON COLUMN moves.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN moves.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN moves.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN moves.sys_deleted_at IS 'SYS削除日時';
