@@ -6,6 +6,8 @@ use DB;
 use Illuminate\Http\Request;
 use HomeMoney\Services\MoveServiceInterface;
 use HomeMoney\Http\Requests\MoveStoreRequest;
+use HomeMoney\Models\Wallet;
+use HomeMoney\Http\Requests\MoveIndexRequest;
 
 class MoveController extends Controller
 {
@@ -17,9 +19,15 @@ class MoveController extends Controller
     	$this->moveService = $moveServiceInterface;
     }
     
-    public function index()
+    public function index(MoveIndexRequest $request)
     {
-    	return null;
+		// 画面表示用の情報を取得
+    	$data = $this->moveService->index($request);
+    	
+    	// 画面表示用のリクエストデータを設定
+    	$data['req'] = $request;
+    	
+    	return view('move.index', $data);
     }
     
     public function create()

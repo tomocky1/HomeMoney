@@ -4,6 +4,10 @@ namespace HomeMoney\Services;
 
 interface MoveServiceInterface
 {
+	/**
+	 * 
+	 * @param $data $tradeDateRange(取引日範囲)、$srcWalletId(移動元財布)、$distWalletId(移動先財布)
+	 */
 	public function index($data);
 	
 	public function create();

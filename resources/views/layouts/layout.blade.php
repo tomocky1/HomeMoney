@@ -145,6 +145,7 @@ desired effect
             </span>
           </a>
           <ul class="treeview-menu">
+            <li class="@yield('menu_move_list')"><a href="{{ route('move.index') }}">移動一覧</a></li>
             <li class="@yield('menu_move_regist')"><a href="{{ route('move.create') }}">移動登録</a></li>
           </ul>
         </li>

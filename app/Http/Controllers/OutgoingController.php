@@ -85,10 +85,10 @@ class OutgoingController extends Controller
     	$data = array();
     	
     	// 選択用の勘定科目
-    	$data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'desc')->get();
+    	$data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'asc')->get();
     	 
     	// 選択用の支払方法
-    	$data['payments'] = Payment::where('enable_flag', true)->orderBy('dorder', 'desc')->get();
+    	$data['payments'] = Payment::where('enable_flag', true)->orderBy('dorder', 'asc')->get();
     	 
     	// 取引日用の今日
     	$data['today'] = Carbon::now()->format('Y年m月d日');

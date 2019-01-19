@@ -28,7 +28,7 @@ class AccountController extends Controller
 	 */
     public function index()
     {
-    	$data['accounts'] = Account::where('sys_deleted_flag', false)->where('enable_flag', true)->get();
+    	$data['accounts'] = Account::where('sys_deleted_flag', false)->where('enable_flag', true)->orderBy('dorder')->get();
     	return view('account.index', $data);
     }
     

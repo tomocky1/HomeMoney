@@ -12,9 +12,47 @@ use HomeMoney\Models\Balance;
 class MoveService implements MoveServiceInterface
 {
 
+	/**
+	 * {@inheritDoc}
+	 * @see \HomeMoney\Services\MoveServiceInterface::index()
+	 */
 	public function index($data)
 	{
+		// 画面表示用変数を初期化
+		$ret = array();
 		
+		// 一覧表示用の収入を取得
+		$builder = Move::where('delete_flag', false);
+		
+		// 日付の範囲が指定された板場合
+		if(isset($data->tradeDateRange)) {
+			$tradeDateFrom = Carbon::createFromFormat('Y年m月d日', explode(" - ", $data->tradeDateRange)[0]);
+			$tradeDateTo = Carbon::createFromFormat('Y年m月d日', explode(" - ", $data->tradeDateRange)[1]);
+			$builder->where('trade_date', '>=', $tradeDateFrom);
+			$builder->where('trade_date', '<=', $tradeDateTo);
+		}
+		
+		// 移動元財布が指定された場合
+		if(isset($data->srcWalletId)) {
+			$builder->where('src_wallet_id', $data->srcWalletId);
+		}
+		
+		// 移動先財布が指定された場合
+		if(isset($data->distWalletId)) {
+			$builder->where('dist_wallet_id', $data->distWalletId);
+		}
+		
+		// 検索結果を取得
+		$ret['moves'] = $builder->orderBy('trade_date', 'desc')->get();
+		
+		// 検索条件用財布一覧を設定
+		$ret['wallets'] = Wallet::where('enable_flag', true)->where('sys_deleted_flag', false)->orderBy('dorder', 'asc')->get();
+		
+		// 取引日検索範囲を設定
+		$ret['startDate'] = isset($tradeDateFrom) ? $tradeDateFrom : Carbon::now()->addMonths(-1)->format('Y-m-d');
+		$ret['endDate'] = isset($tradeDateTo) ? $tradeDateTo : Carbon::now()->format('Y-m-d');
+		
+		return $ret;
 	}
 	
 	public function create()

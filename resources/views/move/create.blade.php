@@ -200,6 +200,12 @@
 <script type="text/javascript">
 	$(function(){
 
+		// 取引日にdatepickerを設定
+	    $('#tradeDate').datepicker({
+	        autoclose: true,
+	        format: 'yyyy年mm月dd日'
+        });
+
 		// 決済日にdatepickerを設定
 	    $('#settleDate').datepicker({
 	        autoclose: true,

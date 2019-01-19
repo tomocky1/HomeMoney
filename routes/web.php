@@ -1,7 +1,5 @@
 <?php
 
-use HomeMoney\Http\Controllers\OutGoingController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -62,6 +60,7 @@ Route::get('Outgoing/delete/{id}', 'OutgoingController@delete')->name('outgoing.
 
 // 移動
 Route::get('Move', 'MoveController@index')->name('move.index');
+Route::post('Move', 'MoveController@index')->name('move.search');
 Route::get('Move/create', 'MoveController@create')->name('move.create');
 Route::post('Move/store', 'MoveController@store')->name('move.store');
 

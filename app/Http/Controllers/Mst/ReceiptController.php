@@ -21,7 +21,7 @@ class ReceiptController extends Controller
     public function index()
     {
     	$date['receipt'] = null;
-    	$data['receipts'] = Receipt::where('sys_deleted_flag', false)->where('enable_flag', true)->get();
+    	$data['receipts'] = Receipt::where('sys_deleted_flag', false)->where('enable_flag', true)->orderBy('dorder', 'asc')->get();
     	$data['wallets'] = Wallet::where('sys_deleted_flag', false)->where('enable_flag', true)->orderBy('dorder', 'asc')->get();
     	return view('receipt.index', $data);
     }
