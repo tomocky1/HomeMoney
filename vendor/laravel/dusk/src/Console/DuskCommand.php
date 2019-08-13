@@ -3,9 +3,10 @@
 namespace Laravel\Dusk\Console;
 
 use Dotenv\Dotenv;
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\RuntimeException;
 
 class DuskCommand extends Command
@@ -57,11 +58,9 @@ class DuskCommand extends Command
         $options = array_slice($_SERVER['argv'], $this->option('without-tty') ? 3 : 2);
 
         return $this->withDuskEnvironment(function () use ($options) {
-            $process = (new ProcessBuilder())
-                ->setTimeout(null)
-                ->setPrefix($this->binary())
-                ->setArguments($this->phpunitArguments($options))
-                ->getProcess();
+            $process = (new Process(array_merge(
+                $this->binary(), $this->phpunitArguments($options)
+            )))->setTimeout(null);
 
             try {
                 $process->setTty(! $this->option('without-tty'));
@@ -88,10 +87,15 @@ class DuskCommand extends Command
     /**
      * Get the array of arguments for running PHPUnit.
      *
+     * @param  array  $options
      * @return array
      */
     protected function phpunitArguments($options)
     {
+        $options = array_values(array_filter($options, function ($option) {
+            return ! Str::startsWith($option, '--env=');
+        }));
+
         return array_merge(['-c', base_path('phpunit.dusk.xml')], $options);
     }
 

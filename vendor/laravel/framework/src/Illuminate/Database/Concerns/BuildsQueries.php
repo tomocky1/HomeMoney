@@ -70,7 +70,7 @@ trait BuildsQueries
      * Execute the query and get the first result.
      *
      * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Model|static|null
+     * @return \Illuminate\Database\Eloquent\Model|object|static|null
      */
     public function first($columns = ['*'])
     {
@@ -83,7 +83,7 @@ trait BuildsQueries
      * @param  mixed  $value
      * @param  callable  $callback
      * @param  callable  $default
-     * @return mixed
+     * @return mixed|$this
      */
     public function when($value, $callback, $default = null)
     {
@@ -99,7 +99,7 @@ trait BuildsQueries
     /**
      * Pass the query to a given callback.
      *
-     * @param  \Closure  $callback
+     * @param  callable  $callback
      * @return \Illuminate\Database\Query\Builder
      */
     public function tap($callback)
@@ -113,7 +113,7 @@ trait BuildsQueries
      * @param  mixed  $value
      * @param  callable  $callback
      * @param  callable  $default
-     * @return mixed
+     * @return mixed|$this
      */
     public function unless($value, $callback, $default = null)
     {

@@ -50,6 +50,7 @@
   <form action="{{ route('outgoing.store') }}" method="POST" id="outgoingForm">
     @if (isset($editFlag))
     <input type="hidden" name="id" id="id" value="{{ $outgoing->id }}" />
+    <input type="hidden" name="editFlag" id="editFlag" value="1" />
     @endif  
   {{ csrf_field() }}
     <div class="box-body">

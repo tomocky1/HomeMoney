@@ -2,11 +2,7 @@
 
 namespace Laravel\Dusk;
 
-use Closure;
 use Exception;
-use Throwable;
-use ReflectionFunction;
-use Illuminate\Support\Collection;
 use Laravel\Dusk\Chrome\SupportsChrome;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -52,7 +48,7 @@ abstract class TestCase extends FoundationTestCase
     /**
      * Determine the application's base URL.
      *
-     * @var string
+     * @return string
      */
     protected function baseUrl()
     {
@@ -60,9 +56,9 @@ abstract class TestCase extends FoundationTestCase
     }
 
     /**
-     * Get a callback that returns the default user to authenticate.
+     * Return the default user to authenticate.
      *
-     * @return \Closure
+     * @return \App\User|int|null
      * @throws \Exception
      */
     protected function user()

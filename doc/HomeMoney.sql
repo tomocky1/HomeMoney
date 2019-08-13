@@ -36,7 +36,7 @@ CREATE TABLE accounts
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -59,7 +59,7 @@ CREATE TABLE balances
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -85,7 +85,7 @@ CREATE TABLE date_numbering
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -109,14 +109,19 @@ CREATE TABLE incomes
 	trade_date date NOT NULL,
 	-- 決済日
 	settle_date date NOT NULL,
-	-- 登録日時
-	regist_tsp timestamp NOT NULL,
+	-- レコード登録日時
+	record_regist_tsp timestamp NOT NULL,
+	-- 削除フラグ
+	delete_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正フラグ
-	modify_flag boolean DEFAULT 'false' NOT NULL,
+	modify_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正前ID
 	id_bfr bigint,
-	-- 削除フラグ
-	delete_flag boolean DEFAULT 'false' NOT NULL,
+	-- 変更済区分 : N:未修正、M:修正済、D:削除済
+	-- 修正・削除を実行した場合の修正元レコードに設定する。
+	updated_flag char(1) DEFAULT 'N' NOT NULL,
+	-- 有効フラグ
+	active_flag boolean DEFAULT 'TRUE' NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -124,7 +129,7 @@ CREATE TABLE incomes
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT UNIQUE_INCOMES_INCOMENO_TRADEDATE UNIQUE (income_no, trade_date)
 ) WITHOUT OIDS;
@@ -164,7 +169,7 @@ CREATE TABLE moves
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT UNIQUE_MOVES_MOVENO_TRADEDATE UNIQUE (move_no, trade_date)
 ) WITHOUT OIDS;
@@ -191,12 +196,12 @@ CREATE TABLE outgoings
 	settle_date date,
 	-- 登録日時
 	regist_tsp timestamp NOT NULL,
+	-- 削除フラグ
+	delete_flag boolean NOT NULL,
 	-- 修正フラグ
 	modify_flag boolean NOT NULL,
 	-- 修正前ID
 	id_bfr bigint,
-	-- 削除フラグ
-	delete_flag boolean NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -204,7 +209,9 @@ CREATE TABLE outgoings
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- 更新区分
+	updated_class char(1) DEFAULT '0',
 	PRIMARY KEY (id),
 	CONSTRAINT UNIQUE_OUTGOINGS_OUTGOINGNO_TRADEDATE UNIQUE (outgoing_no, trade_date)
 ) WITHOUT OIDS;
@@ -230,7 +237,7 @@ CREATE TABLE payments
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -255,7 +262,7 @@ CREATE TABLE receipts
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -271,14 +278,10 @@ CREATE TABLE trans
 	outgoing_id bigint,
 	-- 移動ID
 	move_id bigint,
-	-- 修正削除フラグ
-	mod_del_flg boolean NOT NULL,
 	-- 財布ID
 	wallet_id bigint NOT NULL,
 	-- 勘定科目ID
 	account_list_id bigint,
-	-- 摘要
-	summery varchar NOT NULL,
 	-- 金額
 	amount bigint DEFAULT 0 NOT NULL,
 	-- 増減
@@ -292,7 +295,7 @@ CREATE TABLE trans
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -338,7 +341,7 @@ CREATE TABLE wallets
 	-- SYS削除日時
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
-	sys_deleted_flag boolean DEFAULT 'false' NOT NULL,
+	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -476,10 +479,13 @@ COMMENT ON COLUMN incomes.summery IS '摘要 : 収入の摘要を記載';
 COMMENT ON COLUMN incomes.amount IS '金額';
 COMMENT ON COLUMN incomes.trade_date IS '取引日';
 COMMENT ON COLUMN incomes.settle_date IS '決済日';
-COMMENT ON COLUMN incomes.regist_tsp IS '登録日時';
+COMMENT ON COLUMN incomes.record_regist_tsp IS 'レコード登録日時';
+COMMENT ON COLUMN incomes.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN incomes.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN incomes.id_bfr IS '修正前ID';
-COMMENT ON COLUMN incomes.delete_flag IS '削除フラグ';
+COMMENT ON COLUMN incomes.updated_flag IS '変更済区分 : N:未修正、M:修正済、D:削除済
+修正・削除を実行した場合の修正元レコードに設定する。';
+COMMENT ON COLUMN incomes.active_flag IS '有効フラグ';
 COMMENT ON COLUMN incomes.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN incomes.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN incomes.sys_deleted_at IS 'SYS削除日時';
@@ -511,13 +517,14 @@ COMMENT ON COLUMN outgoings.amount IS '金額';
 COMMENT ON COLUMN outgoings.trade_date IS '取引日';
 COMMENT ON COLUMN outgoings.settle_date IS '決済日';
 COMMENT ON COLUMN outgoings.regist_tsp IS '登録日時';
+COMMENT ON COLUMN outgoings.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN outgoings.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN outgoings.id_bfr IS '修正前ID';
-COMMENT ON COLUMN outgoings.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN outgoings.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN outgoings.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN outgoings.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN outgoings.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN outgoings.updated_class IS '更新区分';
 COMMENT ON TABLE payments IS '支払方法';
 COMMENT ON COLUMN payments.id IS 'ID';
 COMMENT ON COLUMN payments.wallet_id IS '財布ID';
@@ -543,10 +550,8 @@ COMMENT ON COLUMN trans.id IS 'ID';
 COMMENT ON COLUMN trans.income_id IS '収入ID';
 COMMENT ON COLUMN trans.outgoing_id IS '支出ID';
 COMMENT ON COLUMN trans.move_id IS '移動ID';
-COMMENT ON COLUMN trans.mod_del_flg IS '修正削除フラグ';
 COMMENT ON COLUMN trans.wallet_id IS '財布ID';
 COMMENT ON COLUMN trans.account_list_id IS '勘定科目ID';
-COMMENT ON COLUMN trans.summery IS '摘要';
 COMMENT ON COLUMN trans.amount IS '金額';
 COMMENT ON COLUMN trans.up_down IS '増減';
 COMMENT ON COLUMN trans.settle_date IS '決済日';

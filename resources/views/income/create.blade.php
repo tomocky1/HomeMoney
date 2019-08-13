@@ -43,6 +43,10 @@
   
   <!-- form start -->
   <form action="{{ route('income.store') }}" method="POST" id="incomeForm">
+  @if (isset($editFlag))
+    <input type="hidden" name="id" id="id" value="{{ $income->id }}" />
+    <input type="hidden" name="editFlag" id="editFlag" value="1" />
+  @endif  
   {{ csrf_field() }}
     <div class="box-body">
     
@@ -78,7 +82,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label for="accountId">勘定科目</label>
-            <select type="text" class="form-control" id="accountId" name="accountId" placeholder="">
+            <select type="text" class="form-control" id="accountId" name="accountId">
               <option value=""></option>
               @for ($i = 0; $i < count($accounts); $i++)
                 <option value="{{ $accounts[$i]->id }}">{{ $accounts[$i]->name }}</option>

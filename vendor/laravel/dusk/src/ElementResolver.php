@@ -77,6 +77,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
      */
     public function resolveForTyping($field)
     {
@@ -94,6 +95,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
      */
     public function resolveForSelection($field)
     {
@@ -112,6 +114,7 @@ class ElementResolver
      * @param string  $field
      * @param array  $values
      * @return \Facebook\WebDriver\Remote\RemoteWebElement[]
+     * @throws \Exception
      */
     public function resolveSelectOptions($field, array $values)
     {
@@ -133,6 +136,7 @@ class ElementResolver
      * @param  string  $field
      * @param  string  $value
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
      */
     public function resolveForRadioSelection($field, $value = null)
     {
@@ -157,6 +161,7 @@ class ElementResolver
      * @param  string  $field
      * @param  string  $value
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
      */
     public function resolveForChecking($field, $value = null)
     {
@@ -180,6 +185,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
      */
     public function resolveForAttachment($field)
     {
@@ -189,6 +195,25 @@ class ElementResolver
 
         return $this->firstOrFail([
             $field, "input[type=file][name='{$field}']"
+        ]);
+    }
+
+    /**
+     * Resolve the element for a given "field".
+     *
+     * @param  string  $field
+     * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
+     */
+    public function resolveForField($field)
+    {
+        if (! is_null($element = $this->findById($field))) {
+            return $element;
+        }
+
+        return $this->firstOrFail([
+            $field, "input[name='{$field}']", "textarea[name='{$field}']",
+            "select[name='{$field}']", "button[name='{$field}']"
         ]);
     }
 
@@ -302,6 +327,7 @@ class ElementResolver
      *
      * @param  array  $selectors
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     * @throws \Exception
      */
     public function firstOrFail($selectors)
     {

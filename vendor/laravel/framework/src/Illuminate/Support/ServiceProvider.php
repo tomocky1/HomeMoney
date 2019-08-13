@@ -9,7 +9,7 @@ abstract class ServiceProvider
     /**
      * The application instance.
      *
-     * @var \Illuminate\Contracts\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application
      */
     protected $app;
 
@@ -37,7 +37,7 @@ abstract class ServiceProvider
     /**
      * Create a new service provider instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application  $app
      * @return void
      */
     public function __construct($app)
@@ -75,14 +75,18 @@ abstract class ServiceProvider
     /**
      * Register a view file namespace.
      *
-     * @param  string  $path
+     * @param  string|array  $path
      * @param  string  $namespace
      * @return void
      */
     protected function loadViewsFrom($path, $namespace)
     {
-        if (is_dir($appPath = $this->app->resourcePath().'/views/vendor/'.$namespace)) {
-            $this->app['view']->addNamespace($namespace, $appPath);
+        if (is_array($this->app->config['view']['paths'])) {
+            foreach ($this->app->config['view']['paths'] as $viewPath) {
+                if (is_dir($appPath = $viewPath.'/vendor/'.$namespace)) {
+                    $this->app['view']->addNamespace($namespace, $appPath);
+                }
+            }
         }
 
         $this->app['view']->addNamespace($namespace, $path);

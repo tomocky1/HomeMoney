@@ -3,9 +3,13 @@
 namespace HomeMoney\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Income extends Model
 {
+    // SoftDeleteを使う
+    use SoftDeletes;
+    
 	/** 実テーブル名 */
 	protected $table = 'incomes';
 	
@@ -15,8 +19,8 @@ class Income extends Model
 	/** 更新日時 */
 	const UPDATED_AT = 'sys_updated_at';
 	
-	/** 削除日時 */
-	protected $dates = ['trade_date', 'settle_date', 'deleted_at'];
+	/** 日時型を設定 */
+	protected $dates = ['trade_date', 'settle_date', 'sys_deleted_at'];
 	
 	/**
 	 * 

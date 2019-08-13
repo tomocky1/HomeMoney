@@ -4,7 +4,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Optional;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Debug\Dumper;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\HigherOrderTapProxy;
 
@@ -88,7 +87,7 @@ if (! function_exists('array_dot')) {
 
 if (! function_exists('array_except')) {
     /**
-     * Get all of the given array except for a specified array of items.
+     * Get all of the given array except for a specified array of keys.
      *
      * @param  array  $array
      * @param  array|string  $keys
@@ -390,7 +389,7 @@ if (! function_exists('class_basename')) {
 
 if (! function_exists('class_uses_recursive')) {
     /**
-     * Returns all traits used by a class, its subclasses and trait of their traits.
+     * Returns all traits used by a class, its parent classes and trait of their traits.
      *
      * @param  object|string  $class
      * @return array
@@ -403,7 +402,7 @@ if (! function_exists('class_uses_recursive')) {
 
         $results = [];
 
-        foreach (array_merge([$class => $class], class_parents($class)) as $class) {
+        foreach (array_reverse(class_parents($class)) + [$class => $class] as $class) {
             $results += trait_uses_recursive($class);
         }
 
@@ -444,7 +443,7 @@ if (! function_exists('data_get')) {
      * Get an item from an array or object using "dot" notation.
      *
      * @param  mixed   $target
-     * @param  string|array  $key
+     * @param  string|array|int  $key
      * @param  mixed   $default
      * @return mixed
      */
@@ -464,7 +463,11 @@ if (! function_exists('data_get')) {
                     return value($default);
                 }
 
-                $result = Arr::pluck($target, $key);
+                $result = [];
+
+                foreach ($target as $item) {
+                    $result[] = data_get($item, $key);
+                }
 
                 return in_array('*', $key) ? Arr::collapse($result) : $result;
             }
@@ -544,37 +547,21 @@ if (! function_exists('data_set')) {
     }
 }
 
-if (! function_exists('dd')) {
-    /**
-     * Dump the passed variables and end the script.
-     *
-     * @param  mixed
-     * @return void
-     */
-    function dd(...$args)
-    {
-        foreach ($args as $x) {
-            (new Dumper)->dump($x);
-        }
-
-        die(1);
-    }
-}
-
 if (! function_exists('e')) {
     /**
      * Escape HTML special characters in a string.
      *
      * @param  \Illuminate\Contracts\Support\Htmlable|string  $value
+     * @param  bool  $doubleEncode
      * @return string
      */
-    function e($value)
+    function e($value, $doubleEncode = true)
     {
         if ($value instanceof Htmlable) {
             return $value->toHtml();
         }
 
-        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', $doubleEncode);
     }
 }
 
@@ -623,7 +610,7 @@ if (! function_exists('env')) {
                 return;
         }
 
-        if (strlen($value) > 1 && Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
+        if (($valueLength = strlen($value)) > 1 && $value[0] === '"' && $value[$valueLength - 1] === '"') {
             return substr($value, 1, -1);
         }
 
@@ -715,11 +702,16 @@ if (! function_exists('optional')) {
      * Provide access to optional objects.
      *
      * @param  mixed  $value
+     * @param  callable|null  $callback
      * @return mixed
      */
-    function optional($value)
+    function optional($value = null, callable $callback = null)
     {
-        return new Optional($value);
+        if (is_null($callback)) {
+            return new Optional($value);
+        } elseif (! is_null($value)) {
+            return $callback($value);
+        }
     }
 }
 
@@ -864,7 +856,7 @@ if (! function_exists('str_is')) {
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param  string  $pattern
+     * @param  string|array  $pattern
      * @param  string  $value
      * @return bool
      */
@@ -1040,35 +1032,42 @@ if (! function_exists('tap')) {
 
 if (! function_exists('throw_if')) {
     /**
-     * Throw the given exception if the given boolean is true.
+     * Throw the given exception if the given condition is true.
      *
-     * @param  bool  $boolean
+     * @param  mixed  $condition
      * @param  \Throwable|string  $exception
      * @param  array  ...$parameters
-     * @return void
+     * @return mixed
+     *
+     * @throws \Throwable
      */
-    function throw_if($boolean, $exception, ...$parameters)
+    function throw_if($condition, $exception, ...$parameters)
     {
-        if ($boolean) {
+        if ($condition) {
             throw (is_string($exception) ? new $exception(...$parameters) : $exception);
         }
+
+        return $condition;
     }
 }
 
 if (! function_exists('throw_unless')) {
     /**
-     * Throw the given exception unless the given boolean is true.
+     * Throw the given exception unless the given condition is true.
      *
-     * @param  bool  $boolean
+     * @param  mixed  $condition
      * @param  \Throwable|string  $exception
      * @param  array  ...$parameters
-     * @return void
+     * @return mixed
+     * @throws \Throwable
      */
-    function throw_unless($boolean, $exception, ...$parameters)
+    function throw_unless($condition, $exception, ...$parameters)
     {
-        if (! $boolean) {
+        if (! $condition) {
             throw (is_string($exception) ? new $exception(...$parameters) : $exception);
         }
+
+        return $condition;
     }
 }
 
@@ -1154,13 +1153,14 @@ if (! function_exists('windows_os')) {
 
 if (! function_exists('with')) {
     /**
-     * Return the given object. Useful for chaining.
+     * Return the given value, optionally passed through the given callback.
      *
-     * @param  mixed  $object
+     * @param  mixed  $value
+     * @param  callable|null  $callback
      * @return mixed
      */
-    function with($object)
+    function with($value, callable $callback = null)
     {
-        return $object;
+        return is_null($callback) ? $value : $callback($value);
     }
 }

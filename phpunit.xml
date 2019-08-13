@@ -27,5 +27,10 @@
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="DB_DATABASE" value="home_money" />
+        <env name="DB_HOST" value="localhost" />
+        <env name="DB_PORT" value="5432" />
+        <env name="DB_USERNAME" value="tomocky1" />
+        <env name="DB_PASSWORD" value="siokobu8400" />
     </php>
 </phpunit>

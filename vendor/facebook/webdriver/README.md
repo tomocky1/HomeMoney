@@ -1,120 +1,122 @@
-php-webdriver -- WebDriver bindings for PHP
-===========================================
+# php-webdriver – Selenium WebDriver bindings for PHP
 
-##  DESCRIPTION
+[![Latest Stable Version](https://img.shields.io/packagist/v/facebook/webdriver.svg?style=flat-square)](https://packagist.org/packages/facebook/webdriver)
+[![Travis Build](https://img.shields.io/travis/facebook/php-webdriver/community.svg?style=flat-square)](https://travis-ci.org/facebook/php-webdriver)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/php-webdriver)](https://saucelabs.com/u/php-webdriver)
+[![Total Downloads](https://img.shields.io/packagist/dt/facebook/webdriver.svg?style=flat-square)](https://packagist.org/packages/facebook/webdriver)
+[![License](https://img.shields.io/packagist/l/facebook/webdriver.svg?style=flat-square)](https://packagist.org/packages/facebook/webdriver)
 
-This WebDriver client aims to be as close as possible to bindings in other languages. The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
+## Description
+Php-webdriver library is PHP language binding for Selenium WebDriver, which allows you to control web browsers from PHP.
 
-Looking for documentation about php-webdriver? See http://facebook.github.io/php-webdriver/
+This library is compatible with Selenium server version 2.x and 3.x.
+It implements the [JsonWireProtocol](https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol), which is currently supported
+by the Selenium server and will also implement the [W3C WebDriver](https://w3c.github.io/webdriver/webdriver-spec.html) specification in the future.
 
-The PHP client was rewritten from scratch. Using the old version? Check out Adam Goucher's fork of it at https://github.com/Element-34/php-webdriver
+The concepts of this library are very similar to the "official" Java, .NET, Python and Ruby bindings from the
+[Selenium project](https://github.com/SeleniumHQ/selenium/).
 
-Any complaint, question, idea? You can post it on the user group https://www.facebook.com/groups/phpwebdriver/.
+**As of 2013, this PHP client has been rewritten from scratch.**
+Using the old version? Check out [Adam Goucher's fork](https://github.com/Element-34/php-webdriver) of it.
 
-##  GETTING THE CODE
+Looking for API documentation of php-webdriver? See [https://facebook.github.io/php-webdriver/](https://facebook.github.io/php-webdriver/latest/)
 
-There are two ways of getting the code:
+Any complaints, questions, or ideas? Post them in the user group https://www.facebook.com/groups/phpwebdriver/.
 
-### Via Github
-    git clone git@github.com:facebook/php-webdriver.git
+## Installation
 
-### Via Packagist
-Add the dependency to composer.json (see https://packagist.org/packages/facebook/webdriver)
+Installation is possible using [Composer](https://getcomposer.org/).
 
-```json
-{
-  "require": {
-    "facebook/webdriver": "~1.0"
-  }
-}
-```
-
-## INSTALLATION
-
-Download the composer.phar
+If you don't already use Composer, you can download the `composer.phar` binary:
 
     curl -sS https://getcomposer.org/installer | php
 
-Install the library.
+Then install the library:
 
-    php composer.phar install
+    php composer.phar require facebook/webdriver
 
+## Getting started
 
-##  GETTING STARTED
+### Start Server
 
-*   All you need as the server for this client is the selenium-server-standalone-#.jar file provided here: http://selenium-release.storage.googleapis.com/index.html
+The required server is the `selenium-server-standalone-#.jar` file provided here: http://selenium-release.storage.googleapis.com/index.html
 
-*   Download and run that file, replacing # with the current server version.
+Download and run the server by replacing # with the current server version. Keep in mind **you must have Java 8+ installed to run this command**.
 
-    ```
     java -jar selenium-server-standalone-#.jar
-    ```
 
-*   Then when you create a session, be sure to pass the url to where your server is running.
+**NOTE:** If using Firefox, see alternate command below.
 
-    ```php
-    // This would be the url of the host running the server-standalone.jar
-    $host = 'http://localhost:4444/wd/hub'; // this is the default
-    ```
+### Create a Browser Session
 
-*   Launch Firefox
+When creating a browser session, be sure to pass the url of your running server.
 
-    ```php
-    $driver = RemoteWebDriver::create($host, DesiredCapabilities::firefox());
-    ```
+```php
+// This would be the url of the host running the server-standalone.jar
+$host = 'http://localhost:4444/wd/hub'; // this is the default
+```
 
-*   Launch Chrome
+##### Launch Chrome
 
-    ```php
-    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
-    ```
+Make sure to have latest Chrome and [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) versions installed.
 
-*   You can also customize the desired capabilities.
+```php
+$driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+```
 
-    ```php
-    $desired_capabilities = DesiredCapabilities::firefox();
-    $desired_capabilities->setJavascriptEnabled(false);
-    RemoteWebDriver::create($host, $desired_capabilities);
-    ```
+##### Launch Firefox
 
-*   See https://code.google.com/p/selenium/wiki/DesiredCapabilities for more details.
+Make sure to have latest Firefox and [Geckodriver](https://github.com/mozilla/geckodriver/releases) installed.
 
-## RUN UNIT TESTS
+Because Firefox (and Geckodriver) only support the new W3C WebDriver protocol (which is yet to be implemented by php-webdriver - see [issue #469](https://github.com/facebook/php-webdriver/issues/469)),
+the protocols must be translated by Selenium Server - this feature is *partially* available in Selenium Server versions 3.5.0-3.8.1 and you can enable it like this:
 
-To run unit tests simply run:
+    java -jar selenium-server-standalone-3.8.1.jar -enablePassThrough false
 
-    ./vendor/bin/phpunit -c ./tests
+Now you can start Firefox from your code:
 
-Note: For the functional test suite, a running selenium server is required.
+```php
+$driver = RemoteWebDriver::create($host, DesiredCapabilities::firefox());
+```
 
-## MORE INFORMATION
+### Customize Desired Capabilities
 
-Check out the Selenium docs and wiki at http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki
+```php
+$desired_capabilities = DesiredCapabilities::firefox();
+$desired_capabilities->setCapability('acceptSslCerts', false);
+$driver = RemoteWebDriver::create($host, $desired_capabilities);
+```
 
-Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
+* See https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities for more details.
 
-## SUPPORT
+**NOTE:** Above snippets are not intended to be a working example by simply copy-pasting. See [example.php](example.php) for working example.
 
-We have a great community willing to try and help you!
+## Changelog
+For latest changes see [CHANGELOG.md](CHANGELOG.md) file.
 
-Currently we offer support in two manners:
+## More information
 
-### Via our Facebook Group
+Some how-tos are provided right here in [our GitHub wiki](https://github.com/facebook/php-webdriver/wiki).
 
-If you have questions or are an active contributor consider joining our facebook group and contributing to the communal discussion and support
+You may also want to check out the Selenium [docs](http://docs.seleniumhq.org/docs/) and [wiki](https://github.com/SeleniumHQ/selenium/wiki).
 
-https://www.facebook.com/groups/phpwebdriver/
+## Testing framework integration
 
-### Via Github
+To take advantage of automatized testing you may want to integrate php-webdriver to your testing framework.
+There are some projects already providing this:
 
-If you're reading this you've already found our Github repository. If you have a question, feel free to submit it as an issue and our staff will do their best to help you as soon as possible.
+- [Steward](https://github.com/lmc-eu/steward) integrates php-webdriver directly to [PHPUnit](https://phpunit.de/), and provides parallelization
+- [Codeception](http://codeception.com) testing framework provides BDD-layer on top of php-webdriver in its [WebDriver module](http://codeception.com/docs/modules/WebDriver)
+- You can also check out this [blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) + [demo project](https://github.com/DavertMik/php-webdriver-demo), describing simple [PHPUnit](https://phpunit.de/) integration
 
-## CONTRIBUTING
+## Support
 
-We love to have your help to make php-webdriver better. Feel free to 
+We have a great community willing to help you!
 
-*   open an [issue](https://github.com/facebook/php-webdriver/issues) if you run into any problem. 
-*   fork the project and submit [pull request](https://github.com/facebook/php-webdriver/pulls). Before the pull requests can be accepted, a [Contributors Licensing Agreement](http://developers.facebook.com/opensource/cla) must be signed. 
+- **Via our Facebook Group** - If you have questions or are an active contributor consider joining our [facebook group](https://www.facebook.com/groups/phpwebdriver/) and contribute to communal discussion and support
+- **Via StackOverflow** - You can also [ask a question](https://stackoverflow.com/questions/ask?tags=php+selenium-webdriver) or find many already answered question on StackOverflow
+- **Via GitHub** - Another option if you have a question (or bug report) is to [submit it here](https://github.com/facebook/php-webdriver/issues/new) as an new issue
 
-When you are going to contribute, please keep in mind that this webdriver client aims to be as close as possible to other languages Java/Ruby/Python/C#.
-FYI, here is the overview of [the official Java API](http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html?overview-summary.html)
+## Contributing
+
+We love to have your help to make php-webdriver better. See [CONTRIBUTING.md](CONTRIBUTING.md) for more information about contributing and developing php-webdriver.

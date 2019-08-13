@@ -25,6 +25,8 @@ class IncomeController extends Controller
 	
     public function index(IncomeIndexRequest $request)
     {
+        $data = array();
+        
     	// 一覧表示用の収入を取得
     	$builder = Income::where('delete_flag', false);
     	
@@ -67,6 +69,8 @@ class IncomeController extends Controller
     
     public function create()
     {
+        $data = array();
+        
     	// 選択用の勘定科目
     	$data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'desc')->get();
     	
@@ -86,6 +90,23 @@ class IncomeController extends Controller
     	}, 5);
     	
     	return redirect()->route('income.create');
+    }
+    
+    public function edit($id)
+    {
+        // 画面表示用の配列を宣言
+        $data = array();
+        
+        // 編集対象の支出を取得
+        $data['income'] = Income::find($id);
+        
+        // 選択項目を取得
+        $data['accounts'] = Account::where('enable_flag', true)->orderBy('dorder', 'desc')->get(); // 勘定科目
+        $data['receipts'] = Receipt::where('enable_flag', true)->orderBy('dorder', 'desc')->get(); // 受取方法
+        $data['today'] = Carbon::now();
+        $data['editFlag'] = true;
+        
+        return view('income.create', $data);
     }
     
 }

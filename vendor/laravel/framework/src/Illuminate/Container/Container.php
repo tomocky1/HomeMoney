@@ -3,10 +3,12 @@
 namespace Illuminate\Container;
 
 use Closure;
+use Exception;
 use ArrayAccess;
 use LogicException;
 use ReflectionClass;
 use ReflectionParameter;
+use Illuminate\Support\Arr;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 
@@ -134,12 +136,18 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Define a contextual binding.
      *
-     * @param  string  $concrete
+     * @param  array|string  $concrete
      * @return \Illuminate\Contracts\Container\ContextualBindingBuilder
      */
     public function when($concrete)
     {
-        return new ContextualBindingBuilder($this, $this->getAlias($concrete));
+        $aliases = [];
+
+        foreach (Arr::wrap($concrete) as $c) {
+            $aliases[] = $this->getAlias($c);
+        }
+
+        return new ContextualBindingBuilder($this, $aliases);
     }
 
     /**
@@ -188,7 +196,7 @@ class Container implements ArrayAccess, ContainerContract
     public function isShared($abstract)
     {
         return isset($this->instances[$abstract]) ||
-              (isset($this->bindings[$abstract]['shared']) &&
+               (isset($this->bindings[$abstract]['shared']) &&
                $this->bindings[$abstract]['shared'] === true);
     }
 
@@ -206,18 +214,18 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Register a binding with the container.
      *
-     * @param  string|array  $abstract
+     * @param  string  $abstract
      * @param  \Closure|string|null  $concrete
      * @param  bool  $shared
      * @return void
      */
     public function bind($abstract, $concrete = null, $shared = false)
     {
+        $this->dropStaleInstances($abstract);
+
         // If no concrete type was given, we will simply set the concrete type to the
         // abstract type. After that, the concrete type to be registered as shared
         // without being forced to state their classes in both of the parameters.
-        $this->dropStaleInstances($abstract);
-
         if (is_null($concrete)) {
             $concrete = $abstract;
         }
@@ -271,13 +279,28 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Bind a callback to resolve with Container::call.
      *
-     * @param  string  $method
+     * @param  array|string  $method
      * @param  \Closure  $callback
      * @return void
      */
     public function bindMethod($method, $callback)
     {
-        $this->methodBindings[$method] = $callback;
+        $this->methodBindings[$this->parseBindMethod($method)] = $callback;
+    }
+
+    /**
+     * Get the method to be bound in class@method format.
+     *
+     * @param  array|string $method
+     * @return string
+     */
+    protected function parseBindMethod($method)
+    {
+        if (is_array($method)) {
+            return $method[0].'@'.$method[1];
+        }
+
+        return $method;
     }
 
     /**
@@ -323,7 +346,7 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Register a shared binding in the container.
      *
-     * @param  string|array  $abstract
+     * @param  string  $abstract
      * @param  \Closure|string|null  $concrete
      * @return void
      */
@@ -591,11 +614,15 @@ class Container implements ArrayAccess, ContainerContract
      */
     public function get($id)
     {
-        if ($this->has($id)) {
+        try {
             return $this->resolve($id);
-        }
+        } catch (Exception $e) {
+            if ($this->has($id)) {
+                throw $e;
+            }
 
-        throw new EntryNotFoundException;
+            throw new EntryNotFoundException;
+        }
     }
 
     /**
@@ -752,7 +779,7 @@ class Container implements ArrayAccess, ContainerContract
         $reflector = new ReflectionClass($concrete);
 
         // If the type is not instantiable, the developer is attempting to resolve
-        // an abstract type such as an Interface of Abstract Class and there is
+        // an abstract type such as an Interface or Abstract Class and there is
         // no binding registered for the abstractions so we need to bail out.
         if (! $reflector->isInstantiable()) {
             return $this->notInstantiable($concrete);
@@ -936,7 +963,7 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Register a new resolving callback.
      *
-     * @param  string    $abstract
+     * @param  \Closure|string  $abstract
      * @param  \Closure|null  $callback
      * @return void
      */
@@ -956,8 +983,8 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Register a new after resolving callback for all types.
      *
-     * @param  string   $abstract
-     * @param  \Closure|null $callback
+     * @param  \Closure|string  $abstract
+     * @param  \Closure|null  $callback
      * @return void
      */
     public function afterResolving($abstract, Closure $callback = null)
@@ -1166,7 +1193,7 @@ class Container implements ArrayAccess, ContainerContract
      * Set the shared instance of the container.
      *
      * @param  \Illuminate\Contracts\Container\Container|null  $container
-     * @return static
+     * @return \Illuminate\Contracts\Container\Container|static
      */
     public static function setInstance(ContainerContract $container = null)
     {
