@@ -83,12 +83,36 @@ class IncomeController extends Controller
     	return view('income.create', $data);
     }
     
+    /**
+     * "create.blade.php"から呼び出される．editFlag=1の場合は更新、そうでない場合は登録
+     * @param IncomeStoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(IncomeStoreRequest $request)
     {
-    	\DB::transaction(function() use($request) {
-    	    $this->incomeService->store($request);
-    	}, 5);
-    	
+        if($request->editFlag == "1") {
+            \DB::transaction(function() use($request) {
+                $income = $this->incomeService->sharedLock(array($request->id));
+                
+                if($income->version != $request->version) {
+                    return view('income.create', $data);
+                }
+                
+            }, 5);
+            
+        } else {
+        
+        
+            \DB::transaction(function() use($request) {
+                $accountId = $request->accountId;
+                $receiptId = $request->receiptId;
+                $summery = $request->summery;
+                $amount = str_replace(" 円", "", str_replace(",", "", $request->amount));
+                $tradeDate = Carbon::createFromFormat('Y年m月d日', $request->tradeDate);
+                $settleDate = Carbon::createFromFormat('Y年m月d日', $request->settleDate);
+    	        $this->incomeService->store($accountId, $receiptId, $summery, $amount, $tradeDate, $settleDate);
+    	    }, 5);
+        }
     	return redirect()->route('income.create');
     }
     

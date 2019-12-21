@@ -37,6 +37,8 @@ CREATE TABLE accounts
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -60,6 +62,8 @@ CREATE TABLE balances
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -86,6 +90,8 @@ CREATE TABLE date_numbering
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -109,8 +115,8 @@ CREATE TABLE incomes
 	trade_date date NOT NULL,
 	-- 決済日
 	settle_date date NOT NULL,
-	-- レコード登録日時
-	record_regist_tsp timestamp NOT NULL,
+	-- 登録日時
+	regist_tsp timestamp NOT NULL,
 	-- 削除フラグ
 	delete_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正フラグ
@@ -130,6 +136,8 @@ CREATE TABLE incomes
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT UNIQUE_INCOMES_INCOMENO_TRADEDATE UNIQUE (income_no, trade_date)
 ) WITHOUT OIDS;
@@ -156,12 +164,17 @@ CREATE TABLE moves
 	settle_date date NOT NULL,
 	-- 登録日時
 	regist_tsp timestamp NOT NULL,
+	-- 削除フラグ
+	delete_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正フラグ
-	modify_flag boolean DEFAULT 'false' NOT NULL,
+	modify_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正前ID
 	id_bfr bigint,
-	-- 削除フラグ
-	delete_flag boolean NOT NULL,
+	-- 変更済区分 : N:未修正、M:修正済、D:削除済
+	-- 修正・削除を実行した場合の修正元レコードに設定する。
+	updated_flag char(1) DEFAULT 'N' NOT NULL,
+	-- 有効フラグ
+	active_flag boolean DEFAULT 'TRUE' NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -170,6 +183,8 @@ CREATE TABLE moves
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT UNIQUE_MOVES_MOVENO_TRADEDATE UNIQUE (move_no, trade_date)
 ) WITHOUT OIDS;
@@ -197,11 +212,16 @@ CREATE TABLE outgoings
 	-- 登録日時
 	regist_tsp timestamp NOT NULL,
 	-- 削除フラグ
-	delete_flag boolean NOT NULL,
+	delete_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正フラグ
-	modify_flag boolean NOT NULL,
+	modify_flag boolean DEFAULT 'FALSE' NOT NULL,
 	-- 修正前ID
 	id_bfr bigint,
+	-- 変更済区分 : N:未修正、M:修正済、D:削除済
+	-- 修正・削除を実行した場合の修正元レコードに設定する。
+	updated_flag char(1) DEFAULT 'N' NOT NULL,
+	-- 有効フラグ
+	active_flag boolean DEFAULT 'TRUE' NOT NULL,
 	-- SYS登録日時
 	sys_created_at timestamp NOT NULL,
 	-- SYS更新日時
@@ -210,8 +230,8 @@ CREATE TABLE outgoings
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
-	-- 更新区分
-	updated_class char(1) DEFAULT '0',
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT UNIQUE_OUTGOINGS_OUTGOINGNO_TRADEDATE UNIQUE (outgoing_no, trade_date)
 ) WITHOUT OIDS;
@@ -238,6 +258,8 @@ CREATE TABLE payments
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -263,6 +285,8 @@ CREATE TABLE receipts
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -281,7 +305,7 @@ CREATE TABLE trans
 	-- 財布ID
 	wallet_id bigint NOT NULL,
 	-- 勘定科目ID
-	account_list_id bigint,
+	account_id bigint,
 	-- 金額
 	amount bigint DEFAULT 0 NOT NULL,
 	-- 増減
@@ -296,6 +320,8 @@ CREATE TABLE trans
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -342,6 +368,8 @@ CREATE TABLE wallets
 	sys_deleted_at timestamp,
 	-- SYS削除フラグ
 	sys_deleted_flag boolean DEFAULT 'FALSE' NOT NULL,
+	-- VERSION
+	version bigint DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 ) WITHOUT OIDS;
 
@@ -406,7 +434,7 @@ ALTER TABLE incomes
 
 
 ALTER TABLE moves
-	ADD FOREIGN KEY (dist_wallet_id)
+	ADD FOREIGN KEY (src_wallet_id)
 	REFERENCES wallets (id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -414,7 +442,7 @@ ALTER TABLE moves
 
 
 ALTER TABLE moves
-	ADD FOREIGN KEY (src_wallet_id)
+	ADD FOREIGN KEY (dist_wallet_id)
 	REFERENCES wallets (id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -449,6 +477,7 @@ COMMENT ON COLUMN accounts.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN accounts.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN accounts.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN accounts.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN accounts.version IS 'VERSION';
 COMMENT ON TABLE balances IS '残高';
 COMMENT ON COLUMN balances.id IS 'id';
 COMMENT ON COLUMN balances.wallet_id IS '財布ID';
@@ -458,6 +487,7 @@ COMMENT ON COLUMN balances.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN balances.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN balances.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN balances.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN balances.version IS 'VERSION';
 COMMENT ON TABLE date_numbering IS '日別採番';
 COMMENT ON COLUMN date_numbering.id IS 'ID';
 COMMENT ON COLUMN date_numbering.clazz IS '採番種別 : 種別
@@ -470,6 +500,7 @@ COMMENT ON COLUMN date_numbering.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN date_numbering.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN date_numbering.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN date_numbering.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN date_numbering.version IS 'VERSION';
 COMMENT ON TABLE incomes IS '収入';
 COMMENT ON COLUMN incomes.id IS 'ID';
 COMMENT ON COLUMN incomes.account_id IS '勘定科目ID';
@@ -479,7 +510,7 @@ COMMENT ON COLUMN incomes.summery IS '摘要 : 収入の摘要を記載';
 COMMENT ON COLUMN incomes.amount IS '金額';
 COMMENT ON COLUMN incomes.trade_date IS '取引日';
 COMMENT ON COLUMN incomes.settle_date IS '決済日';
-COMMENT ON COLUMN incomes.record_regist_tsp IS 'レコード登録日時';
+COMMENT ON COLUMN incomes.regist_tsp IS '登録日時';
 COMMENT ON COLUMN incomes.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN incomes.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN incomes.id_bfr IS '修正前ID';
@@ -490,6 +521,7 @@ COMMENT ON COLUMN incomes.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN incomes.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN incomes.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN incomes.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN incomes.version IS 'VERSION';
 COMMENT ON TABLE moves IS '移動';
 COMMENT ON COLUMN moves.id IS 'ID';
 COMMENT ON COLUMN moves.src_wallet_id IS '移動元財布ID';
@@ -500,13 +532,17 @@ COMMENT ON COLUMN moves.amount IS '金額';
 COMMENT ON COLUMN moves.trade_date IS '取引日';
 COMMENT ON COLUMN moves.settle_date IS '決済日';
 COMMENT ON COLUMN moves.regist_tsp IS '登録日時';
+COMMENT ON COLUMN moves.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN moves.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN moves.id_bfr IS '修正前ID';
-COMMENT ON COLUMN moves.delete_flag IS '削除フラグ';
+COMMENT ON COLUMN moves.updated_flag IS '変更済区分 : N:未修正、M:修正済、D:削除済
+修正・削除を実行した場合の修正元レコードに設定する。';
+COMMENT ON COLUMN moves.active_flag IS '有効フラグ';
 COMMENT ON COLUMN moves.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN moves.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN moves.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN moves.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN moves.version IS 'VERSION';
 COMMENT ON TABLE outgoings IS '支出';
 COMMENT ON COLUMN outgoings.id IS 'ID';
 COMMENT ON COLUMN outgoings.account_id IS '勘定科目ID';
@@ -520,11 +556,14 @@ COMMENT ON COLUMN outgoings.regist_tsp IS '登録日時';
 COMMENT ON COLUMN outgoings.delete_flag IS '削除フラグ';
 COMMENT ON COLUMN outgoings.modify_flag IS '修正フラグ';
 COMMENT ON COLUMN outgoings.id_bfr IS '修正前ID';
+COMMENT ON COLUMN outgoings.updated_flag IS '変更済区分 : N:未修正、M:修正済、D:削除済
+修正・削除を実行した場合の修正元レコードに設定する。';
+COMMENT ON COLUMN outgoings.active_flag IS '有効フラグ';
 COMMENT ON COLUMN outgoings.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN outgoings.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN outgoings.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN outgoings.sys_deleted_flag IS 'SYS削除フラグ';
-COMMENT ON COLUMN outgoings.updated_class IS '更新区分';
+COMMENT ON COLUMN outgoings.version IS 'VERSION';
 COMMENT ON TABLE payments IS '支払方法';
 COMMENT ON COLUMN payments.id IS 'ID';
 COMMENT ON COLUMN payments.wallet_id IS '財布ID';
@@ -535,6 +574,7 @@ COMMENT ON COLUMN payments.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN payments.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN payments.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN payments.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN payments.version IS 'VERSION';
 COMMENT ON TABLE receipts IS '受取方法';
 COMMENT ON COLUMN receipts.id IS 'ID';
 COMMENT ON COLUMN receipts.wallet_id IS '財布ID';
@@ -545,13 +585,14 @@ COMMENT ON COLUMN receipts.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN receipts.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN receipts.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN receipts.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN receipts.version IS 'VERSION';
 COMMENT ON TABLE trans IS '受払';
 COMMENT ON COLUMN trans.id IS 'ID';
 COMMENT ON COLUMN trans.income_id IS '収入ID';
 COMMENT ON COLUMN trans.outgoing_id IS '支出ID';
 COMMENT ON COLUMN trans.move_id IS '移動ID';
 COMMENT ON COLUMN trans.wallet_id IS '財布ID';
-COMMENT ON COLUMN trans.account_list_id IS '勘定科目ID';
+COMMENT ON COLUMN trans.account_id IS '勘定科目ID';
 COMMENT ON COLUMN trans.amount IS '金額';
 COMMENT ON COLUMN trans.up_down IS '増減';
 COMMENT ON COLUMN trans.settle_date IS '決済日';
@@ -559,6 +600,7 @@ COMMENT ON COLUMN trans.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN trans.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN trans.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN trans.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN trans.version IS 'VERSION';
 COMMENT ON TABLE USERS IS 'ユーザ';
 COMMENT ON COLUMN USERS.id IS 'ID';
 COMMENT ON COLUMN USERS.name IS 'ユーザ名';
@@ -577,6 +619,7 @@ COMMENT ON COLUMN wallets.sys_created_at IS 'SYS登録日時';
 COMMENT ON COLUMN wallets.sys_updated_at IS 'SYS更新日時';
 COMMENT ON COLUMN wallets.sys_deleted_at IS 'SYS削除日時';
 COMMENT ON COLUMN wallets.sys_deleted_flag IS 'SYS削除フラグ';
+COMMENT ON COLUMN wallets.version IS 'VERSION';
 
 
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Income extends Model
 {
     // SoftDeleteを使う
-    use SoftDeletes;
+//    use SoftDeletes;
     
 	/** 実テーブル名 */
 	protected $table = 'incomes';
@@ -20,7 +20,7 @@ class Income extends Model
 	const UPDATED_AT = 'sys_updated_at';
 	
 	/** 日時型を設定 */
-	protected $dates = ['trade_date', 'settle_date', 'sys_deleted_at'];
+	protected $dates = ['regist_tsp', 'trade_date', 'settle_date', 'sys_deleted_at'];
 	
 	/**
 	 * 
